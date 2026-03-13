@@ -2,13 +2,21 @@
 import * as React from "react";
 import type { Config, Data } from "@puckeditor/core";
 import { Studio } from "../src/components/editor/Studio";
+import { Text, Type } from "lucide-react";
 
 // Sample Puck config exercising all field types
 const config: Config = {
   components: {
     Hero: {
       fields: {
-        title: { type: "text", label: "Title" },
+        title: {
+          type: "text",
+          label: "Title",
+          labelIcon: <Type className="w-3 h-3" />,
+          ai: {
+            instructions: "Always use caps",
+          },
+        },
         subtitle: { type: "textarea", label: "Subtitle" },
         alignment: {
           type: "radio",
@@ -70,7 +78,14 @@ const config: Config = {
         items: [],
       },
       render: ({ heading, body }) => (
-        <div style={{ border: "1px solid #e2e8f0", borderRadius: 8, padding: 16, margin: 8 }}>
+        <div
+          style={{
+            border: "1px solid #e2e8f0",
+            borderRadius: 8,
+            padding: 16,
+            margin: 8,
+          }}
+        >
           <h2 style={{ margin: "0 0 8px", fontSize: 20 }}>{heading}</h2>
           <div dangerouslySetInnerHTML={{ __html: body }} />
         </div>
@@ -111,6 +126,7 @@ export default function EditorPage() {
           console.log("Published:", d);
         }}
         onChange={setData}
+        aiHost="/api/puck-ai"
         className="flex-1 overflow-hidden"
       />
     </div>
