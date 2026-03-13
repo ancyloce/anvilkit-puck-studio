@@ -1,9 +1,12 @@
 "use client";
 import * as React from "react";
-import { Puck, Drawer } from "@puckeditor/core";
-import type { Config, Data, Overrides,  } from "@puckeditor/core";
+import { Puck } from "@puckeditor/core";
+import type { Config, Data, Overrides } from "@puckeditor/core";
+import { createAiPlugin } from "@puckeditor/plugin-ai";
+import "@puckeditor/plugin-ai/styles.css";
 import { puckOverrides } from "../overrides/index";
 import "@puckeditor/core/puck.css";
+import { EditorLayout } from '../layout/Layout'
 
 export interface StudioProps {
   // Required Puck props
@@ -19,6 +22,9 @@ export interface StudioProps {
   // Override escape hatches — consumer-provided keys win over defaults
   overrideExtensions?: Partial<Overrides>;
 
+  // AI plugin — point at your /api/puck-ai endpoint
+  aiHost?: string;
+
   // Studio shell customization
   headerSlot?: React.ReactNode;
   drawerHeaderSlot?: React.ReactNode;
@@ -30,15 +36,19 @@ export function Studio({
   data,
   onPublish,
   onChange,
-  ui,
-  onAction,
   overrideExtensions,
+  aiHost,
   className,
 }: StudioProps) {
-  // Merge: consumer overrideExtensions win over puckOverrides defaults
+  const aiPlugin = React.useMemo(
+    () => createAiPlugin({ host: aiHost }),
+    [aiHost]
+  );
+
+  // Merge: ai plugin preview override → puckOverrides defaults → consumer extensions win
   const mergedOverrides: Partial<Overrides> = React.useMemo(
-    () => ({ ...puckOverrides, ...overrideExtensions }),
-    [overrideExtensions]
+    () => ({ ...aiPlugin.overrides, ...puckOverrides, ...overrideExtensions }),
+    [aiPlugin.overrides, overrideExtensions]
   );
 
   return (
@@ -49,7 +59,9 @@ export function Studio({
         onPublish={onPublish}
         onChange={onChange}
         overrides={mergedOverrides}
+        plugins={[aiPlugin]}
       >
+        <EditorLayout aiPanel={aiPlugin.render()} />
       </Puck>
     </div>
   );
