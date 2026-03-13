@@ -2,8 +2,10 @@
 import * as React from "react";
 import { Input } from "@/components/ui/input";
 import { FieldLabel } from "../FieldWrapper";
+import { AiButton } from "../AiButton";
 
 interface TextFieldProps {
+  field?: { ai?: { instructions?: string } };
   value: string;
   onChange: (value: string) => void;
   readOnly?: boolean;
@@ -14,6 +16,7 @@ interface TextFieldProps {
 
 // text field — 200ms debounce to avoid canvas re-render on every keystroke
 export function TextField({
+  field,
   value,
   onChange,
   readOnly,
@@ -36,13 +39,18 @@ export function TextField({
 
   return (
     <FieldLabel label={label ?? ""} labelIcon={labelIcon} readOnly={readOnly}>
-      <Input
-        value={local}
-        onChange={(e) => setLocal(e.target.value)}
-        readOnly={readOnly}
-        placeholder={placeholder}
-        className="h-8 text-sm"
-      />
+      <div className="flex items-center gap-1">
+        <Input
+          value={local}
+          onChange={(e) => setLocal(e.target.value)}
+          readOnly={readOnly}
+          placeholder={placeholder}
+          className="h-8 text-sm flex-1"
+        />
+        {field?.ai && (
+          <AiButton ai={field.ai} onGenerate={(v) => { setLocal(v); onChange(v); }} />
+        )}
+      </div>
     </FieldLabel>
   );
 }
