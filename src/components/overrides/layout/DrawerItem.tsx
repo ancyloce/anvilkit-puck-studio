@@ -1,12 +1,13 @@
 "use client";
 import * as React from "react";
 import { usePuck } from "@puckeditor/core";
-import { LayoutTemplate } from "lucide-react";
+
+function getPlaceholderUrl(name: string): string {
+  return `https://picsum.photos/seed/${encodeURIComponent(name)}/120/80`;
+}
 
 // drawerItem + componentItem override
 // Puck signature: { children: ReactNode; name: string }
-// CRITICAL: must return ReactElement (not undefined/null)
-// Puck handles drag internally — we just render the visual
 export function DrawerItem({
   children,
   name,
@@ -17,17 +18,19 @@ export function DrawerItem({
   const { appState } = usePuck();
   const componentConfig = (appState as any).config?.components?.[name];
   const thumbnail: string | undefined = componentConfig?.metadata?.thumbnail;
+  const src = thumbnail ?? getPlaceholderUrl(name);
 
   return (
-    <div className="flex items-center gap-2 rounded-md border border-transparent bg-muted/40 px-3 py-2 text-sm cursor-grab select-none transition-colors hover:bg-muted hover:border-border active:cursor-grabbing mb-1">
-      <div className="shrink-0 w-8 h-8 rounded border border-border bg-background flex items-center justify-center overflow-hidden">
-        {thumbnail ? (
-          <img src={thumbnail} alt={name} className="w-full h-full object-cover" />
-        ) : (
-          <LayoutTemplate className="w-4 h-4 text-muted-foreground" />
-        )}
+    <div className="flex flex-col rounded-md border border-border bg-muted/40 cursor-grab select-none transition-colors hover:bg-muted active:cursor-grabbing overflow-hidden">
+      <div className="w-full h-16 bg-muted overflow-hidden">
+        <img
+          src={src}
+          alt={name}
+          className="w-full h-full object-cover"
+          onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
+        />
       </div>
-      <span className="truncate font-medium">{name ?? children}</span>
+      <div className="px-2 py-1.5 text-xs font-medium truncate">{name ?? children}</div>
     </div>
   );
 }

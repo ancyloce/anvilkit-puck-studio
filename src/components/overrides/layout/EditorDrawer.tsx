@@ -45,5 +45,29 @@ export function EditorComponents({
 }: {
   children: React.ReactNode;
 }): React.ReactElement {
-  return <div className="flex flex-col p-2">{children}</div>;
+  return (
+    <div data-puck-components-grid className="p-2">
+      <style>{`
+        [data-puck-components-grid] [data-puck-drawer] {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 6px;
+        }
+        /* flatten item wrapper and draggable wrapper */
+        [data-puck-components-grid] [data-puck-drawer] > div,
+        [data-puck-components-grid] [data-puck-drawer] > div > div {
+          display: contents;
+        }
+        /* hide the ghost/bg copy */
+        [data-puck-components-grid] [data-puck-drawer] > div > div > div:first-child {
+          display: none;
+        }
+        /* flatten the real draggable wrapper */
+        [data-puck-components-grid] [data-puck-drawer] > div > div > div:last-child {
+          display: contents;
+        }
+      `}</style>
+      {children}
+    </div>
+  );
 }
