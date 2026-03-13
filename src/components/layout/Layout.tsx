@@ -1,7 +1,7 @@
 import { motion } from "motion/react";
-import { Aside } from "./Aside";
+import { Aside } from "./sidebar/Aside";
 import { Puck } from "@puckeditor/core";
-import { Header } from "./Header";
+import { Header } from "./header/Header";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useStore } from "zustand";
 import { uiStore } from "@/store";
