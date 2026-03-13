@@ -123,3 +123,21 @@
     @apply bg-background text-foreground;
     }
 }
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--color-neutral-500));
+  border-radius: 20px;
+}
+
+* {
+  scrollbar-color: hsl(var(--color-neutral-500)) transparent;
+  scrollbar-width: thin;
+}
