@@ -45,5 +45,5 @@ export function EditorComponents({
 }: {
   children: React.ReactNode;
 }): React.ReactElement {
-  return <div className="flex flex-col gap-1">{children}</div>;
+  return <div className="flex flex-col p-2">{children}</div>;
 }
