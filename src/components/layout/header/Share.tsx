@@ -4,10 +4,10 @@ import * as React from 'react';
 import { Link2, Check, Users, Globe, Lock } from 'lucide-react';
 import {
   Popover,
-  PopoverContent,
+  PopoverPanel,
   PopoverTrigger,
   PopoverTitle,
-} from '@/components/ui/popover';
+} from '@/components/animate-ui/components/base/popover';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
@@ -50,11 +50,13 @@ export const Share = () => {
 
   return (
     <Popover>
-      <PopoverTrigger render={<Button size="sm" variant="outline" />}>
-        <Link2 className="h-4 w-4" />
-        Share
+      <PopoverTrigger>
+        <Button size="sm" variant="outline">
+          <Link2 className="h-4 w-4" />
+          Share
+        </Button>
       </PopoverTrigger>
-      <PopoverContent side="bottom" align="end" className="w-80 gap-3">
+      <PopoverPanel side="bottom" align="end" className="w-80 flex flex-col gap-3">
         <PopoverTitle className="text-base font-medium">Share</PopoverTitle>
 
         {/* Collaborators */}
@@ -98,7 +100,7 @@ export const Share = () => {
             {copied ? 'Copied' : 'Copy'}
           </Button>
         </div>
-      </PopoverContent>
+      </PopoverPanel>
     </Popover>
   );
 };

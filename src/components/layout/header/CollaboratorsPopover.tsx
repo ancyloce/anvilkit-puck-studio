@@ -3,10 +3,10 @@
 import * as React from 'react';
 import {
   Popover,
-  PopoverContent,
+  PopoverPanel,
   PopoverTrigger,
   PopoverTitle,
-} from '@/components/ui/popover';
+} from '@/components/animate-ui/components/base/popover';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 const AVATARS = [
@@ -29,17 +29,15 @@ const [currentUser, ...others] = AVATARS;
 export const CollaboratorsPopover = () => {
   return (
     <Popover>
-      <PopoverTrigger
-        render={
-          <button className="rounded-full ring-2 ring-background focus:outline-none focus-visible:ring-primary" />
-        }
-      >
-        <Avatar className="size-6">
-          <AvatarImage src={currentUser.src} />
-          <AvatarFallback>{currentUser.fallback}</AvatarFallback>
-        </Avatar>
+      <PopoverTrigger>
+        <button className="rounded-full ring-2 ring-background focus:outline-none focus-visible:ring-primary">
+          <Avatar className="size-6">
+            <AvatarImage src={currentUser.src} />
+            <AvatarFallback>{currentUser.fallback}</AvatarFallback>
+          </Avatar>
+        </button>
       </PopoverTrigger>
-      <PopoverContent side="bottom" align="end" className="w-64 gap-3">
+      <PopoverPanel side="bottom" align="end" className="w-64 flex flex-col gap-3">
         <PopoverTitle className="text-sm font-medium">Collaborators</PopoverTitle>
         <div className="flex flex-col gap-2">
           {[currentUser, ...others].map((user) => (
@@ -55,7 +53,7 @@ export const CollaboratorsPopover = () => {
             </div>
           ))}
         </div>
-      </PopoverContent>
+      </PopoverPanel>
     </Popover>
   );
 };

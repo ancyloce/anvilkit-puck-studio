@@ -43,7 +43,7 @@ export const Header = () => {
           <div className="flex items-center justify-center gap-1 flex-1">
             {appState?.data?.root?.props?.title || ""}
           </div>
-          <div className="flex items-center justify-center h-5 gap-2">
+          <div className="flex items-center justify-center gap-2 h-full">
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
