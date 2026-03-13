@@ -16,7 +16,7 @@ export function FieldWrapper({
   console.log(" the FieldWrapper is called");
   return (
     <ScrollArea className="h-full">
-      <div className="flex flex-col gap-4">{children}</div>
+      <div className="flex flex-col gap-0">{children}</div>
     </ScrollArea>
   );
 }
@@ -25,27 +25,32 @@ export function FieldWrapper({
 export function FieldLabel({
   children,
   label,
-  icon,
+  labelIcon,
   el,
+  type,
   readOnly,
   className,
 }: {
   children?: React.ReactNode;
-  icon?: React.ReactNode;
+  labelIcon?: React.ReactNode;
+  type?: string;
   label: string;
   el?: "label" | "div";
   readOnly?: boolean;
   className?: string;
 }): React.ReactElement {
-  console.log(" the label is ", label);
+  console.log("Lable type", labelIcon);
   const El = el ?? "div";
-  console.log("label", label);
   return (
     <TooltipProvider>
       <El className={`flex flex-col gap-1.5 ${className ?? ""}`}>
         <div className="flex items-center gap-1">
-          {icon && <span className="text-muted-foreground">{icon}</span>}
-          <Label className="text-xs font-medium text-muted-foreground">{label}</Label>
+          {labelIcon && (
+            <span className="text-muted-foreground">{labelIcon}</span>
+          )}
+          <Label className="text-xs font-medium text-muted-foreground">
+            {label}
+          </Label>
           {label && (
             <Tooltip>
               <TooltipTrigger asChild>
@@ -55,7 +60,9 @@ export function FieldLabel({
             </Tooltip>
           )}
           {readOnly && (
-            <span className="ml-auto text-xs text-muted-foreground/50">Read only</span>
+            <span className="ml-auto text-xs text-muted-foreground/50">
+              Read only
+            </span>
           )}
         </div>
         {children}

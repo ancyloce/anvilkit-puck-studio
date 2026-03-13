@@ -9,10 +9,18 @@ interface TextFieldProps {
   readOnly?: boolean;
   placeholder?: string;
   label?: string;
+  labelIcon?: React.ReactNode;
 }
 
 // text field — 200ms debounce to avoid canvas re-render on every keystroke
-export function TextField({ value, onChange, readOnly, placeholder, label }: TextFieldProps) {
+export function TextField({
+  value,
+  onChange,
+  readOnly,
+  placeholder,
+  label,
+  labelIcon,
+}: TextFieldProps) {
   const [local, setLocal] = React.useState(value ?? "");
 
   React.useEffect(() => {
@@ -27,7 +35,7 @@ export function TextField({ value, onChange, readOnly, placeholder, label }: Tex
   }, [local]);
 
   return (
-    <FieldLabel label={label ?? ""} readOnly={readOnly}>
+    <FieldLabel label={label ?? ""} labelIcon={labelIcon} readOnly={readOnly}>
       <Input
         value={local}
         onChange={(e) => setLocal(e.target.value)}
