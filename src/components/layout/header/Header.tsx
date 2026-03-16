@@ -1,4 +1,5 @@
 import { AnimatedAsana } from "./AnimatedAsana";
+import * as React from "react";
 import { Button } from "@/components/ui/button";
 import {
   ArrowLeft,
@@ -7,12 +8,14 @@ import {
   Download,
   FileDown,
   Send,
+  Sun,
+  Moon,
 } from "lucide-react";
 import { usePuck } from "@puckeditor/core";
 import { Separator } from "@/components/ui/separator";
 import { Share } from "./Share";
 import { CollaboratorsPopover } from "./CollaboratorsPopover";
-import { useMsg } from "@/store/hooks";
+import { useMsg, useTheme, useToggleTheme } from "@/store/hooks";
 import {
   Tooltip,
   TooltipContent,
@@ -35,6 +38,16 @@ export const Header = () => {
   const redoTooltip = useMsg("header.redo.tooltip");
   const exportLabel = useMsg("header.export");
   const exportJson = useMsg("header.export.json");
+  const theme = useTheme();
+  const toggleTheme = useToggleTheme();
+  const themeLightLabel = useMsg("header.theme.light");
+  const themeDarkLabel = useMsg("header.theme.dark");
+  const themeLabel = theme === "dark" ? themeLightLabel : themeDarkLabel;
+
+  // Sync class on mount for persisted theme
+  React.useEffect(() => {
+    document.documentElement.classList.toggle("dark", theme === "dark");
+  }, []);
 
   return (
     <TooltipProvider>
@@ -118,6 +131,17 @@ export const Header = () => {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+
+            <Separator orientation="vertical" className="h-5 mx-1" />
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="ghost" size="icon" onClick={toggleTheme} aria-label={themeLabel}>
+                  {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>{themeLabel}</TooltipContent>
+            </Tooltip>
 
             <Separator orientation="vertical" className="h-5 mx-1" />
 

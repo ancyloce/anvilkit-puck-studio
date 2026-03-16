@@ -27,6 +27,12 @@ export function useOutlineExpanded(id: string) {
 export function useToggleOutlineItem() {
   return useStore(useEditorUiStoreApi(), (s) => s.toggleOutlineItem);
 }
+export function useTheme() {
+  return useStore(useEditorUiStoreApi(), (s) => s.theme);
+}
+export function useToggleTheme() {
+  return useStore(useEditorUiStoreApi(), (s) => s.toggleTheme);
+}
 
 // i18n hooks — subscribe by key, not by full messages object
 export function useMsg(key: string): string {

@@ -38,4 +38,6 @@ export const defaultMessages: Messages = {
   "richtext.italic": "斜体",
   "richtext.link": "链接",
   "richtext.link.prompt": "URL：",
+  "header.theme.light": "浅色模式",
+  "header.theme.dark": "深色模式",
 };

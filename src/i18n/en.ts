@@ -38,4 +38,6 @@ export const defaultMessages: Messages = {
   "richtext.italic": "Italic",
   "richtext.link": "Link",
   "richtext.link.prompt": "URL:",
+  "header.theme.light": "Light mode",
+  "header.theme.dark": "Dark mode",
 };

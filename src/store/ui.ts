@@ -18,7 +18,12 @@ interface OutlineSlice {
   toggleOutlineItem: (id: string) => void;
 }
 
-export type EditorUiStore = DrawerSlice & AsideSlice & OutlineSlice;
+interface ThemeSlice {
+  theme: "light" | "dark";
+  toggleTheme: () => void;
+}
+
+export type EditorUiStore = DrawerSlice & AsideSlice & OutlineSlice & ThemeSlice;
 
 export type EditorUiStoreApi = ReturnType<typeof createEditorUiStore>;
 
@@ -40,6 +45,13 @@ export function createEditorUiStore(storeId: string) {
           set((s) => ({
             outlineExpanded: { ...s.outlineExpanded, [id]: !s.outlineExpanded[id] },
           })),
+        theme: "light",
+        toggleTheme: () =>
+          set((s) => {
+            const next = s.theme === "light" ? "dark" : "light";
+            document.documentElement.classList.toggle("dark", next === "dark");
+            return { theme: next };
+          }),
       }),
       {
         name: `anvilkit-ui-${storeId}`,
@@ -47,6 +59,7 @@ export function createEditorUiStore(storeId: string) {
           activeTab: s.activeTab,
           drawerCollapsed: s.drawerCollapsed,
           outlineExpanded: s.outlineExpanded,
+          theme: s.theme,
           // drawerSearch intentionally excluded — transient input
         }),
       }
