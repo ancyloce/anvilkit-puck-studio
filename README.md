@@ -15,7 +15,7 @@ Drop-in Shadcn UI overrides for all 15 Puck Editor surfaces — enterprise-ready
 
 Puck Editor ships with a minimal default UI that works for prototypes but falls short in enterprise products — no design system consistency, no accessible components, no Tailwind integration.
 
-`@anvilkit/puck-overrides` solves this with a single drop-in `overrides` object built on Shadcn UI, Radix UI primitives, and Tailwind v4. All 15 override surfaces are covered. Components are **bundled** into the package — you do not run a Shadcn CLI to copy them.
+`@anvilkit/puck-overrides` solves this with a single drop-in `overrides` object built on Shadcn UI, @base-ui/react primitives, and Tailwind v4. All 15 override surfaces are covered. Components are **bundled** into the package — you do not run a Shadcn CLI to copy them.
 
 **Key value props:**
 
@@ -23,7 +23,57 @@ Puck Editor ships with a minimal default UI that works for prototypes but falls 
 - TypeScript-first with full type inference
 - Ships ESM + CJS + `.d.ts`
 - No Next.js at runtime — `next` is demo-only
-- Radix UI and lucide-react are bundled, not peer deps
+- @base-ui/react and lucide-react are bundled, not peer deps
+
+---
+
+## Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                          <Studio />                                  │
+│  props: config, data, onPublish, images?, copywritings?, aiHost?    │
+│                                                                      │
+│  ┌──────────────────────────────────────────────────────────────┐   │
+│  │  <Puck overrides={mergedOverrides} plugins={[aiPlugin]}>     │   │
+│  │                                                              │   │
+│  │  ┌────────────────────────────────────────────────────────┐  │   │
+│  │  │                   <EditorLayout />                     │  │   │
+│  │  │                                                        │  │   │
+│  │  │  ┌──────────────────────────────────────────────────┐  │  │   │
+│  │  │  │                   <Header />                     │  │  │   │
+│  │  │  │    back · title · undo/redo · collab · publish   │  │  │   │
+│  │  │  └──────────────────────────────────────────────────┘  │  │   │
+│  │  │                                                        │  │   │
+│  │  │  ┌──────┐  ┌────────────────┐  ┌────────┐  ┌───────┐  │  │   │
+│  │  │  │Aside │  │ Dynamic Panel  │  │ Canvas │  │Fields │  │  │   │
+│  │  │  │      │  │                │  │        │  │       │  │  │   │
+│  │  │  │insert│  │ insert →       │  │ Puck.  │  │ Puck. │  │  │   │
+│  │  │  │layer │  │  Puck.Comps    │  │Preview │  │Fields │  │  │   │
+│  │  │  │image │  │ layer  →       │  │        │  │       │  │  │   │
+│  │  │  │text  │  │  Puck.Outline  │  │        │  │       │  │  │   │
+│  │  │  │copil.│  │ image  →       │  │        │  │       │  │  │   │
+│  │  │  │      │  │  ImageLibrary  │  │        │  │       │  │  │   │
+│  │  │  │      │  │ text   →       │  │        │  │       │  │  │   │
+│  │  │  │      │  │  CopyLibrary   │  │        │  │       │  │  │   │
+│  │  │  │      │  │ copilot→       │  │        │  │       │  │  │   │
+│  │  │  │      │  │  aiPanel       │  │        │  │       │  │  │   │
+│  │  │  └──────┘  └────────────────┘  └────────┘  └───────┘  │  │   │
+│  │  └────────────────────────────────────────────────────────┘  │   │
+│  └──────────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────────┘
+
+Puck Override Surfaces (15 total)
+──────────────────────────────────
+Layout:  header · headerActions · drawer · components · outline
+Canvas:  iframe · preview · componentOverlay · actionBar · drawerItem · componentItem
+Fields:  fields · fieldLabel · fieldTypes (11 renderers) · puck
+
+Custom drag-drop events (window):
+  anvilkit:librarydragstart  →  fired on pointer-down in either library
+  anvilkit:imagedrop         →  fired on pointer-up with { src, clientX, clientY }
+  anvilkit:textdrop          →  fired on pointer-up with { text, clientX, clientY }
+```
 
 ---
 
@@ -46,9 +96,10 @@ The package ships both ESM and CJS builds. No additional bundler configuration i
 | `react` | `>=19` |
 | `react-dom` | `>=19` |
 | `@puckeditor/core` | `^0.21.1` |
+| `@base-ui/react` | `^1.2.0` |
 | `tailwindcss` | `^4` |
 
-> Radix UI primitives and `lucide-react` are **bundled** — do not install them separately.
+> `lucide-react`, `@dnd-kit/*`, `motion`, and `zustand` are **bundled** — do not install them separately.
 
 ---
 
@@ -94,7 +145,62 @@ export default function Editor({ config, data, onPublish }) {
 }
 ```
 
-`Studio` is a thin wrapper that renders `<Puck overrides={puckOverrides} />` with the correct CSS already applied.
+`Studio` renders `<Puck overrides={puckOverrides} />` with the correct CSS applied and the full editor shell (header, sidebar, canvas, fields panel).
+
+---
+
+## Library Customization
+
+`Studio` accepts optional props to populate the Image Library and Copy Library panels with your own content.
+
+### Image Library
+
+```tsx
+import type { ImagesProps, ImageItem } from "@anvilkit/puck-overrides";
+
+// Option A — replace the default picsum seed list
+<Studio
+  config={config}
+  data={data}
+  onPublish={save}
+  images={{ seeds: ["brand", "product", "team", "office"] }}
+/>
+
+// Option B — provide a fully custom image list
+const myImages: ImageItem[] = [
+  { id: "hero-1", src: "https://cdn.example.com/hero.jpg", alt: "Hero" },
+  { id: "logo-1", src: "https://cdn.example.com/logo.png", alt: "Logo" },
+];
+
+<Studio
+  config={config}
+  data={data}
+  onPublish={save}
+  images={{ items: myImages }}
+/>
+```
+
+When `items` is provided the search input is hidden (external data is static). When only `seeds` is provided, search still generates picsum results from the query string.
+
+### Copy Library
+
+```tsx
+import type { CopywritingProps, CopywritingItem } from "@anvilkit/puck-overrides";
+
+const brandCopy: CopywritingItem[] = [
+  { category: "Headlines", label: "Brand promise", text: "Built for builders." },
+  { category: "CTAs",      label: "Primary",       text: "Start for free" },
+];
+
+<Studio
+  config={config}
+  data={data}
+  onPublish={save}
+  copywritings={{ items: brandCopy }}
+/>
+```
+
+Omit the prop entirely to use the built-in 14-snippet default library.
 
 ---
 
@@ -128,7 +234,7 @@ export default function Editor({ config, data, onPublish }) {
 | `fields` | `FieldWrapper` | Props panel field list wrapper |
 | `fieldLabel` | `FieldWrapper` | Individual field label + tooltip |
 | `fieldTypes` | `FieldTypesRegistry` | Map of all 11 field type renderers |
-| `puckMenu` | `EditorHeader` | Puck logo / menu slot in header |
+| `puck` | `EditorHeader` | Puck logo / menu slot in header |
 
 > **`headerActions` callout:** This surface receives Puck's built-in publish button as `children`. You must render `{children}` inside your implementation or the publish button disappears (regression introduced in Puck 0.15+).
 
