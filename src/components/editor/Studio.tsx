@@ -14,6 +14,13 @@ import type { ImagesProps } from "../layout/sidebar/library/ImageLibrary";
 import type { CopywritingProps } from "../layout/sidebar/library/CopyLibrary";
 export type { ImagesProps, CopywritingProps };
 
+import { createEditorUiStore } from "@/store/ui";
+import { createEditorI18nStore } from "@/store/i18n";
+import { EditorUiStoreProvider } from "@/store/ui-context";
+import { EditorI18nStoreProvider } from "@/store/i18n-context";
+import { defaultMessages } from "@/store/i18n-defaults";
+import type { Locale, Messages } from "@/store/i18n";
+
 export interface StudioProps {
   // Required Puck props
   config: Config;
@@ -39,6 +46,13 @@ export interface StudioProps {
   // Library data
   images?: ImagesProps;
   copywritings?: CopywritingProps;
+
+  // Per-instance store ID — used to namespace localStorage keys
+  storeId?: string;
+
+  // i18n
+  locale?: Locale;
+  messages?: Messages;
 }
 
 export function Studio({
@@ -51,7 +65,18 @@ export function Studio({
   className,
   images,
   copywritings,
+  storeId,
+  locale,
+  messages,
 }: StudioProps) {
+  const uiStore = React.useRef(createEditorUiStore(storeId ?? "default")).current;
+  const i18nStore = React.useRef(
+    createEditorI18nStore({
+      locale: locale ?? "en",
+      messages: messages ?? defaultMessages,
+    })
+  ).current;
+
   const aiPlugin = React.useMemo(
     () => createAiPlugin({ host: aiHost }),
     [aiHost],
@@ -64,21 +89,25 @@ export function Studio({
   );
 
   return (
-    <div className={className}>
-      <Puck
-        config={config}
-        data={data}
-        onPublish={onPublish}
-        onChange={onChange}
-        overrides={mergedOverrides}
-        plugins={[aiPlugin]}
-      >
-        <EditorLayout
-          aiPanel={aiPlugin.render()}
-          images={images}
-          copywritings={copywritings}
-        />
-      </Puck>
-    </div>
+    <EditorUiStoreProvider value={uiStore}>
+      <EditorI18nStoreProvider value={i18nStore}>
+        <div className={className}>
+          <Puck
+            config={config}
+            data={data}
+            onPublish={onPublish}
+            onChange={onChange}
+            overrides={mergedOverrides}
+            plugins={[aiPlugin]}
+          >
+            <EditorLayout
+              aiPanel={aiPlugin.render()}
+              images={images}
+              copywritings={copywritings}
+            />
+          </Puck>
+        </div>
+      </EditorI18nStoreProvider>
+    </EditorUiStoreProvider>
   );
 }

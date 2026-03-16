@@ -74,10 +74,8 @@ export function EditorHeader({
           <DropdownMenu>
             <Tooltip>
               <TooltipTrigger asChild>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" aria-label="Export">
-                    <Download className="h-4 w-4" />
-                  </Button>
+                <DropdownMenuTrigger aria-label="Export" className="inline-flex items-center justify-center rounded-md h-9 w-9 hover:bg-accent hover:text-accent-foreground">
+                  <Download className="h-4 w-4" />
                 </DropdownMenuTrigger>
               </TooltipTrigger>
               <TooltipContent>Export</TooltipContent>

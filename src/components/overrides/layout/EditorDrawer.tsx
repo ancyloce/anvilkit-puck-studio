@@ -1,8 +1,7 @@
 "use client";
 import * as React from "react";
-import { useStore } from "zustand";
 import { Search } from "lucide-react";
-import { uiStore } from "../../../store/index";
+import { useDrawerSearch, useSetDrawerSearch } from "@/store/hooks";
 import { ScrollArea } from "../../ui/scroll-area";
 import { Input } from "../../ui/input";
 
@@ -12,8 +11,8 @@ export function EditorDrawer({
 }: {
   children: React.ReactNode;
 }): React.ReactElement {
-  const search = useStore(uiStore, (s) => s.drawerSearch);
-  const setSearch = useStore(uiStore, (s) => s.setDrawerSearch);
+  const search = useDrawerSearch();
+  const setSearch = useSetDrawerSearch();
 
   return (
     <div className="flex flex-col h-full">

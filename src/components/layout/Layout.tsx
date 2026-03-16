@@ -2,8 +2,7 @@ import { motion } from "motion/react";
 import { Aside } from "./sidebar/Aside";
 import { Puck } from "@puckeditor/core";
 import { Header } from "./header/Header";
-import { useStore } from "zustand";
-import { uiStore } from "@/store";
+import { useActiveTab } from "@/store/hooks";
 import { ImageLibrary } from "./sidebar/library/ImageLibrary";
 import { CopyLibrary } from "./sidebar/library/CopyLibrary";
 import type { ImagesProps } from "./sidebar/library/ImageLibrary";
@@ -21,7 +20,7 @@ export const EditorLayout = ({
   images,
   copywritings,
 }: EditorLayoutProps) => {
-  const activeTab = useStore(uiStore, (s) => s.activeTab);
+  const activeTab = useActiveTab();
 
   return (
     <div className="max-sm:hidden overflow-hidden h-screen">

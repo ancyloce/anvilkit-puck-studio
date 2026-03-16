@@ -1,5 +1,4 @@
-import { useStore } from "zustand";
-import { uiStore } from "@/store";
+import { useActiveTab, useSetActiveTab } from "@/store/hooks";
 import { Tabs, TabsList, TabsTab } from "@/components/animate-ui/components/base/tabs";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Plus, Image, Layers2, Type, Bot } from "lucide-react";
@@ -13,8 +12,8 @@ const tabs = [
 ];
 
 export function Aside() {
-    const activeTab = useStore(uiStore, (s) => s.activeTab);
-    const setActiveTab = useStore(uiStore, (s) => s.setActiveTab);
+    const activeTab = useActiveTab();
+    const setActiveTab = useSetActiveTab();
 
     return (
         <div className="w-18 h-full py-4 border-r border-neutral-200 dark:border-neutral-800/80">
