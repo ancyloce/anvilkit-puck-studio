@@ -2,6 +2,9 @@
   "name": "@anvilkit/puck-overrides",
   "version": "0.1.0",
   "description": "Shadcn UI replacement for all Puck Editor override surfaces",
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "exports": {
     ".": {
