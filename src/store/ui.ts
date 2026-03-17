@@ -1,7 +1,21 @@
 import { createStore } from "zustand";
 import { persist } from "zustand/middleware";
 
-export type ActiveTab = "insert" | "layer" | "image" | "text" | "copilot";
+export const ACTIVE_TABS = [
+  "insert",
+  "layer",
+  "image",
+  "text",
+  "copilot",
+] as const;
+
+export type ActiveTab = (typeof ACTIVE_TABS)[number];
+
+const activeTabSet = new Set<string>(ACTIVE_TABS);
+
+export function isActiveTab(value: string): value is ActiveTab {
+  return activeTabSet.has(value);
+}
 
 interface DrawerSlice {
   drawerSearch: string;

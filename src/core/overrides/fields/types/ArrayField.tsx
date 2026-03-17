@@ -1,6 +1,7 @@
 "use client";
 import * as React from "react";
 import { AutoField } from "@puckeditor/core";
+import type { Field as PuckField } from "@puckeditor/core";
 import {
   DndContext,
   closestCenter,
@@ -33,15 +34,15 @@ import {
 import { FieldLabel } from "../FieldWrapper";
 
 interface ArrayItem {
+  _id?: string;
   [key: string]: unknown;
 }
 
+type ArraySubField = PuckField & { label?: string };
+
 interface ArrayFieldDef {
   type: "array";
-  arrayFields: Record<
-    string,
-    { type: string; label?: string; [key: string]: unknown }
-  >;
+  arrayFields: Record<string, ArraySubField>;
   getItemSummary?: (item: unknown, index: number) => string;
   defaultItemProps?:
     | Record<string, unknown>
@@ -77,6 +78,10 @@ interface SortableItemProps {
   onRemove: (i: number) => void;
   onUpdate: (i: number, subName: string, val: unknown) => void;
   getSummary: (item: ArrayItem, i: number) => string;
+}
+
+function getArraySubField(subName: string, subField: ArraySubField): ArraySubField {
+  return { ...subField, label: subField.label ?? subName };
 }
 
 function SortableItem({
@@ -170,7 +175,7 @@ function SortableItem({
           {Object.entries(field.arrayFields).map(([subName, subField]) => (
             <AutoField
               key={subName}
-              field={{ ...subField, label: subField.label ?? subName } as any}
+              field={getArraySubField(subName, subField)}
               value={item[subName]}
               onChange={(val) => onUpdate(index, subName, val)}
               readOnly={readOnly}
@@ -259,9 +264,12 @@ export function ArrayField({
   const getSummary = (item: ArrayItem, i: number): string => {
     if (field.getItemSummary) return field.getItemSummary(item, i);
     const first = Object.entries(item).find(
-      ([k, v]) => k !== "_id" && typeof v === "string" && v,
+      (entry): entry is [string, string] =>
+        entry[0] !== "_id" &&
+        typeof entry[1] === "string" &&
+        entry[1].length > 0,
     );
-    return (first?.[1] as string) || `Item ${i + 1}`;
+    return first?.[1] ?? `Item ${i + 1}`;
   };
 
   return (

@@ -12,6 +12,7 @@ const Tooltip = TooltipPrimitive.Root
 // @base-ui/react Trigger renders its child natively — asChild is not needed
 // but we accept it to avoid breaking call sites
 function TooltipTrigger({ asChild: _asChild, ...props }: React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Trigger> & { asChild?: boolean }) {
+  void _asChild
   return <TooltipPrimitive.Trigger {...props} />
 }
 

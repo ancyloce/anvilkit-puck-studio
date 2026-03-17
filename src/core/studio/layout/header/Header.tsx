@@ -15,7 +15,9 @@ import { usePuck } from "@puckeditor/core";
 import { Separator } from "@/components/ui/separator";
 import { Share } from "./Share";
 import { CollaboratorsPopover } from "./CollaboratorsPopover";
-import { useMsg, useTheme, useToggleTheme, useThemeSync } from "@/store/hooks";
+import { useMsg, useTheme, useToggleTheme } from "@/store/hooks";
+import { useThemeSync } from "@/features/theme/useThemeSync";
+import { exportDataAsJson } from "@/features/export/export-json";
 import {
   Tooltip,
   TooltipContent,
@@ -114,14 +116,9 @@ export const Header = () => {
               <DropdownMenuContent align="end">
                 <DropdownMenuItem
                   onClick={() => {
-                    const json = JSON.stringify(appState.data, null, 2);
-                    const blob = new Blob([json], { type: "application/json" });
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement("a");
-                    a.href = url;
-                    a.download = `${appState.data.root?.props?.title || "page"}.json`;
-                    a.click();
-                    URL.revokeObjectURL(url);
+                    exportDataAsJson(appState.data, {
+                      filenameBase: appState.data.root?.props?.title,
+                    });
                   }}
                 >
                   <FileDown className="h-4 w-4" /> {exportJson}

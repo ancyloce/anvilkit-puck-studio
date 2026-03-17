@@ -5,9 +5,15 @@
  */
 
 // Component prop types
-export type { StudioProps } from "@/components/editor/Studio";
-export type { ImagesProps, ImageItem } from "@/components/layout/sidebar/library/ImageLibrary";
-export type { CopywritingProps, CopywritingItem } from "@/components/layout/sidebar/library/CopyLibrary";
+export type { StudioProps } from "@/core/studio/Studio";
+export type {
+  ImagesProps,
+  ImageItem,
+} from "@/core/studio/layout/sidebar/library/ImageLibrary";
+export type {
+  CopywritingProps,
+  CopywritingItem,
+} from "@/core/studio/layout/sidebar/library/CopyLibrary";
 
 // Store types
 export type {

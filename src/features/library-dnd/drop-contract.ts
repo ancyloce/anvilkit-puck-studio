@@ -29,20 +29,50 @@ export interface TextDropDetail {
   clientY: number;
 }
 
+export interface LibraryDragEventMap {
+  [LIBRARY_DRAG_START]: LibraryDragStartDetail;
+  [IMAGE_DROP]: ImageDropDetail;
+  [TEXT_DROP]: TextDropDetail;
+}
+
+export type LibraryDragEventName = keyof LibraryDragEventMap;
+
+export type LibraryDragEvent<TName extends LibraryDragEventName> =
+  CustomEvent<LibraryDragEventMap[TName]>;
+
+function createLibraryDragEvent<TName extends LibraryDragEventName>(
+  type: TName,
+  detail: LibraryDragEventMap[TName],
+): LibraryDragEvent<TName> {
+  return new CustomEvent(type, { detail });
+}
+
+export function addLibraryDragEventListener<TName extends LibraryDragEventName>(
+  type: TName,
+  listener: (event: LibraryDragEvent<TName>) => void,
+  target: Window = window,
+): () => void {
+  const wrapped: EventListener = (event) => {
+    listener(event as LibraryDragEvent<TName>);
+  };
+
+  target.addEventListener(type, wrapped);
+
+  return () => {
+    target.removeEventListener(type, wrapped);
+  };
+}
+
 // ─── Typed dispatch helpers ──────────────────────────────────────────────────
 
 export function dispatchLibraryDragStart(type: LibraryDragType): void {
-  window.dispatchEvent(
-    new CustomEvent<LibraryDragStartDetail>(LIBRARY_DRAG_START, {
-      detail: { type },
-    }),
-  );
+  window.dispatchEvent(createLibraryDragEvent(LIBRARY_DRAG_START, { type }));
 }
 
 export function dispatchImageDrop(detail: ImageDropDetail): void {
-  window.dispatchEvent(new CustomEvent<ImageDropDetail>(IMAGE_DROP, { detail }));
+  window.dispatchEvent(createLibraryDragEvent(IMAGE_DROP, detail));
 }
 
 export function dispatchTextDrop(detail: TextDropDetail): void {
-  window.dispatchEvent(new CustomEvent<TextDropDetail>(TEXT_DROP, { detail }));
+  window.dispatchEvent(createLibraryDragEvent(TEXT_DROP, detail));
 }

@@ -1,6 +1,7 @@
 "use client";
 import * as React from "react";
 import { usePuck } from "@puckeditor/core";
+import type { ComponentData, Overrides } from "@puckeditor/core";
 import { Label } from "@/components/ui/label";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -15,6 +16,22 @@ import {
 } from "@/components/ui/breadcrumb";
 
 type BreadcrumbSegment = { label: string; onSelect?: () => void };
+type FieldWrapperProps = Parameters<NonNullable<Overrides["fields"]>>[0];
+type BaseFieldLabelProps = Parameters<NonNullable<Overrides["fieldLabel"]>>[0];
+type FieldLabelProps = Omit<BaseFieldLabelProps, "icon"> & {
+  icon?: React.ReactNode;
+  labelIcon?: React.ReactNode;
+};
+
+function getComponentTypeLabel(item: ComponentData | null | undefined): string {
+  if (!item) return "Component";
+  return typeof item.type === "string" ? item.type : String(item.type);
+}
+
+function getComponentId(item: ComponentData | null | undefined): string | null {
+  const id = item?.props?.id;
+  return typeof id === "string" ? id : null;
+}
 
 function useBreadcrumbs(): BreadcrumbSegment[] {
   const { appState, dispatch, selectedItem, getParentById } = usePuck();
@@ -27,8 +44,9 @@ function useBreadcrumbs(): BreadcrumbSegment[] {
     return [{ label: "Page" }];
   }
 
-  const selectedType = (selectedItem as any).type ?? "Component";
-  const parent = getParentById((selectedItem as any).props?.id ?? "");
+  const selectedType = getComponentTypeLabel(selectedItem);
+  const parentId = getComponentId(selectedItem);
+  const parent = parentId ? getParentById(parentId) : undefined;
 
   if (!parent) {
     // Top-level component
@@ -36,7 +54,7 @@ function useBreadcrumbs(): BreadcrumbSegment[] {
   }
 
   // Nested component — show parent type as intermediate crumb when available
-  const parentType = (parent as any).type ?? "Component";
+  const parentType = getComponentTypeLabel(parent);
   return [
     { label: "Page", onSelect: selectRoot },
     { label: parentType },
@@ -47,11 +65,7 @@ function useBreadcrumbs(): BreadcrumbSegment[] {
 // fields override — exact Puck signature: { children, isLoading, itemSelector }
 export function FieldWrapper({
   children,
-}: {
-  children?: React.ReactNode;
-  isLoading?: boolean;
-  itemSelector?: unknown;
-}): React.ReactElement {
+}: FieldWrapperProps): React.ReactElement {
   const crumbs = useBreadcrumbs();
 
   return (
@@ -93,27 +107,20 @@ export function FieldWrapper({
 export function FieldLabel({
   children,
   label,
+  icon,
   labelIcon,
   el,
-  type: _type,
   readOnly,
   className,
-}: {
-  children?: React.ReactNode;
-  labelIcon?: React.ReactNode;
-  type?: string;
-  label: string;
-  el?: "label" | "div";
-  readOnly?: boolean;
-  className?: string;
-}): React.ReactElement {
+}: FieldLabelProps): React.ReactElement {
   const El = el ?? "div";
+  const labelAdornment = icon ?? labelIcon;
   return (
     <TooltipProvider>
       <El className={`flex flex-col gap-1.5 ${className ?? ""}`}>
         <div className="flex items-center gap-1">
-          {labelIcon && (
-            <span className="text-muted-foreground">{labelIcon}</span>
+          {labelAdornment && (
+            <span className="text-muted-foreground">{labelAdornment}</span>
           )}
           <Label className="text-xs font-medium text-muted-foreground">
             {label}

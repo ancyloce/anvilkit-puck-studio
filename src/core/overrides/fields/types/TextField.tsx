@@ -25,17 +25,27 @@ export function TextField({
   labelIcon,
 }: TextFieldProps) {
   const [local, setLocal] = React.useState(value ?? "");
+  const onChangeRef = React.useRef(onChange);
+  const lastCommittedValueRef = React.useRef(value ?? "");
 
   React.useEffect(() => {
+    onChangeRef.current = onChange;
+  }, [onChange]);
+
+  React.useEffect(() => {
+    lastCommittedValueRef.current = value ?? "";
     setLocal(value ?? "");
   }, [value]);
 
   React.useEffect(() => {
     const timer = setTimeout(() => {
-      if (local !== value) onChange(local);
+      if (local !== lastCommittedValueRef.current) {
+        onChangeRef.current(local);
+        lastCommittedValueRef.current = local;
+      }
     }, 200);
     return () => clearTimeout(timer);
-  }, [local, value, onChange]);
+  }, [local]);
 
   return (
     <FieldLabel label={label ?? ""} labelIcon={labelIcon} readOnly={readOnly}>
@@ -48,7 +58,14 @@ export function TextField({
           className="h-8 text-sm flex-1"
         />
         {field?.ai && (
-          <AiButton ai={field.ai} onGenerate={(v) => { setLocal(v); onChange(v); }} />
+          <AiButton
+            ai={field.ai}
+            onGenerate={(nextValue) => {
+              lastCommittedValueRef.current = nextValue;
+              setLocal(nextValue);
+              onChangeRef.current(nextValue);
+            }}
+          />
         )}
       </div>
     </FieldLabel>

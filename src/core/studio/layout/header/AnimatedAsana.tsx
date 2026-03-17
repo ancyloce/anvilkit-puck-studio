@@ -85,6 +85,7 @@ export function AnimatedAsana({
   priority = false, // Default non-priority
   ...props
 }: AsanaIconProps): JSX.Element {
+  void priority;
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const [animationPhase, setAnimationPhase] =
     useState<AnimationPhase>("three-circles");

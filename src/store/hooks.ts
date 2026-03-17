@@ -1,4 +1,3 @@
-import * as React from "react";
 import { useStore } from "zustand";
 import { useEditorUiStoreApi } from "./ui-context";
 import { useEditorI18nStoreApi } from "./i18n-context";
@@ -33,13 +32,6 @@ export function useTheme() {
 }
 export function useToggleTheme() {
   return useStore(useEditorUiStoreApi(), (s) => s.toggleTheme);
-}
-/** Syncs the store theme value to document.documentElement.classList. */
-export function useThemeSync() {
-  const theme = useTheme();
-  React.useEffect(() => {
-    document.documentElement.classList.toggle("dark", theme === "dark");
-  }, [theme]);
 }
 
 // i18n hooks — subscribe by key, not by full messages object

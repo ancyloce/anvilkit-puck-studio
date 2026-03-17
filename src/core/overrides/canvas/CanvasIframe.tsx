@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
-import { useCanvasThemeSync } from "@/features/canvas/useCanvasThemeSync";
-import { useLibraryDropBridge } from "@/features/canvas/useLibraryDropBridge";
+import { useThemeSync } from "@/features/theme/useThemeSync";
+import { useLibraryDropBridge } from "./useLibraryDropBridge";
 
 // iframe override — Puck signature: { children: ReactNode; document?: Document }
 export function CanvasIframe({
@@ -11,7 +11,7 @@ export function CanvasIframe({
   children: React.ReactNode;
   document?: Document;
 }): React.ReactElement {
-  useCanvasThemeSync(iframeDoc);
+  useThemeSync({ document: iframeDoc, injectCanvasCss: true });
   useLibraryDropBridge(iframeDoc);
   return <>{children}</>;
 }

@@ -24,7 +24,9 @@ export function EditorOutline({
           <div className="px-3 py-1.5 text-xs text-muted-foreground truncate">
             Selected:{" "}
             <span className="font-medium text-foreground">
-              {(selectedItem as any).type ?? "Component"}
+              {typeof selectedItem.type === "string"
+                ? selectedItem.type
+                : String(selectedItem.type)}
             </span>
           </div>
           <Separator />

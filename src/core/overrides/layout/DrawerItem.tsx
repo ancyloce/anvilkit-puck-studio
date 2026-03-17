@@ -15,9 +15,12 @@ export function DrawerItem({
   children: React.ReactNode;
   name: string;
 }): React.ReactElement {
-  const { appState } = usePuck();
-  const componentConfig = (appState as any).config?.components?.[name];
-  const thumbnail: string | undefined = componentConfig?.metadata?.thumbnail;
+  const { config } = usePuck();
+  const componentConfig = config.components?.[name];
+  const thumbnail =
+    typeof componentConfig?.metadata?.thumbnail === "string"
+      ? componentConfig.metadata.thumbnail
+      : undefined;
   const src = thumbnail ?? getPlaceholderUrl(name);
 
   return (

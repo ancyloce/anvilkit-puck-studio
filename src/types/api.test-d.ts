@@ -56,9 +56,13 @@ expectNotAssignable<ActiveTab>("unknown-tab");
 
 // ─── EditorUiStore shape ─────────────────────────────────────────────────────
 declare const uiStore: EditorUiStore;
+declare const uiStoreApi: EditorUiStoreApi;
+declare const i18nStoreApi: EditorI18nStoreApi;
 expectType<ActiveTab>(uiStore.activeTab);
 expectType<"light" | "dark">(uiStore.theme);
 expectType<string>(uiStore.drawerSearch);
+expectType<EditorUiStore>(uiStoreApi.getState());
+expectType<Locale>(i18nStoreApi.getState().locale);
 
 // ─── Locale ──────────────────────────────────────────────────────────────────
 expectAssignable<Locale>("en");

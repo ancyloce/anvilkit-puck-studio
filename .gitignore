@@ -32,3 +32,6 @@ next-env.d.ts
 
 # Lock 
 pnpm-lock.yaml
+
+# Docs
+docs/

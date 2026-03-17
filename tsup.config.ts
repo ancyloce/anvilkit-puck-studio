@@ -30,7 +30,7 @@ export default defineConfig([
     external: sharedExternal,
   },
   {
-    entry: { overrides: "src/components/overrides/index.tsx" },
+    entry: { overrides: "src/core/overrides/index.tsx" },
     format: ["esm", "cjs"],
     dts: true,
     sourcemap: false,

@@ -2,8 +2,8 @@
 import * as React from "react";
 import { Search } from "lucide-react";
 import { useDrawerSearch, useSetDrawerSearch, useMsg } from "@/store/hooks";
-import { ScrollArea } from "../../ui/scroll-area";
-import { Input } from "../../ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Input } from "@/components/ui/input";
 
 // drawer override — Puck signature: { children: ReactNode }
 export function EditorDrawer({

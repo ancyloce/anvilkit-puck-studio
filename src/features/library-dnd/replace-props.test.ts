@@ -99,6 +99,19 @@ describe("replaceImageInProps", () => {
     expect(result.hero).toBe("/new.jpg");
     expect(result.thumb).toBe("/new.jpg");
   });
+
+  it("does not mutate nested objects while replacing image URLs", () => {
+    const original = {
+      media: { src: "https://picsum.photos/seed/g/960/960", alt: "cover" },
+    };
+
+    const result = replaceImageInProps(original, "/new.jpg");
+
+    expect(result).not.toBe(original);
+    expect(result.media).not.toBe(original.media);
+    expect(original.media.src).toBe("https://picsum.photos/seed/g/960/960");
+    expect((result.media as Record<string, unknown>).src).toBe("/new.jpg");
+  });
 });
 
 // ─── replaceTextInProps ───────────────────────────────────────────────────────
@@ -152,6 +165,18 @@ describe("replaceTextInProps", () => {
     );
     expect(replaced).toBe(false);
     expect(result).toEqual({ count: 42, active: true });
+  });
+
+  it("skips empty string fields when choosing the fallback text target", () => {
+    const { result, replaced } = replaceTextInProps(
+      { title: "", subtitle: "World" },
+      "New text",
+      "no-match",
+    );
+
+    expect(replaced).toBe(true);
+    expect(result.title).toBe("");
+    expect(result.subtitle).toBe("New text");
   });
 
   it("does not mutate the original props object", () => {

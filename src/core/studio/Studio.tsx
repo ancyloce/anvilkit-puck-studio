@@ -4,8 +4,8 @@ import { Puck } from "@puckeditor/core";
 import type { Config, Data, Overrides } from "@puckeditor/core";
 import "@puckeditor/core/puck.css";
 
-import { puckOverrides } from "../overrides/index";
-import { EditorLayout } from "../layout/Layout";
+import { puckOverrides } from "@/core/overrides";
+import { EditorLayout } from "./layout/Layout";
 
 import type { ImagesProps, CopywritingProps } from "@/types/public";
 export type { ImagesProps, CopywritingProps };
