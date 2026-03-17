@@ -20,6 +20,16 @@ export default defineConfig([
     external: sharedExternal,
   },
   {
+    entry: { legacy: "src/index.legacy.ts" },
+    format: ["esm", "cjs"],
+    dts: true,
+    sourcemap: false,
+    clean: false,
+    treeshake: true,
+    splitting: false,
+    external: sharedExternal,
+  },
+  {
     entry: { overrides: "src/components/overrides/index.tsx" },
     format: ["esm", "cjs"],
     dts: true,
