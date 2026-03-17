@@ -191,15 +191,23 @@ export function ArrayField({
   label,
   id = "",
 }: ArrayFieldProps) {
-  const atMax = field.max !== undefined && value.length >= field.max;
-  const atMin = field.min !== undefined && value.length <= field.min;
   const [openIndex, setOpenIndex] = React.useState<number | null>(null);
 
-  // stable ids for dnd-kit keying
-  const itemIds = React.useMemo(
-    () => value.map((_, i) => `${id}-item-${i}`),
-    [value.length, id],
-  );
+  // Persist a stable _id on each item so dnd-kit identity survives reorders.
+  // We write the id back into the array on first render and whenever new items
+  // arrive without one (e.g. from external data or defaultItemProps).
+  const stableValue = React.useMemo(() => {
+    const needsId = value.some((item) => !item._id);
+    if (!needsId) return value;
+    return value.map((item) =>
+      item._id ? item : { ...item, _id: `${id}-${Math.random().toString(36).slice(2)}` },
+    );
+  }, [value, id]);
+
+  const itemIds = stableValue.map((item) => item._id as string);
+
+  const atMax = field.max !== undefined && stableValue.length >= field.max;
+  const atMin = field.min !== undefined && stableValue.length <= field.min;
 
   const sensors = useSensors(useSensor(PointerSensor));
 
@@ -209,7 +217,7 @@ export function ArrayField({
     const from = itemIds.indexOf(active.id as string);
     const to = itemIds.indexOf(over.id as string);
     if (from === -1 || to === -1) return;
-    onChange(arrayMove(value, from, to));
+    onChange(arrayMove(stableValue, from, to));
   };
 
   const defaultItem = (): ArrayItem => {
@@ -221,28 +229,28 @@ export function ArrayField({
 
   const addItem = () => {
     if (atMax || readOnly) return;
-    const newIndex = value.length;
-    onChange([...value, defaultItem()]);
+    const newIndex = stableValue.length;
+    onChange([...stableValue, defaultItem()]);
     setOpenIndex(newIndex);
   };
 
   const removeItem = (i: number) => {
     if (atMin || readOnly) return;
-    const next = [...value];
+    const next = [...stableValue];
     next.splice(i, 1);
     onChange(next);
   };
 
   const duplicateItem = (i: number) => {
     if (atMax || readOnly) return;
-    const next = [...value];
-    next.splice(i + 1, 0, { ...value[i] });
+    const next = [...stableValue];
+    next.splice(i + 1, 0, { ...stableValue[i] });
     onChange(next);
   };
 
   const updateItem = (i: number, subName: string, val: unknown) => {
     onChange(
-      value.map((item, idx) =>
+      stableValue.map((item, idx) =>
         idx === i ? { ...item, [subName]: val } : item,
       ),
     );
@@ -250,8 +258,10 @@ export function ArrayField({
 
   const getSummary = (item: ArrayItem, i: number): string => {
     if (field.getItemSummary) return field.getItemSummary(item, i);
-    const first = Object.values(item).find((v) => typeof v === "string" && v);
-    return (first as string) || `Item ${i + 1}`;
+    const first = Object.entries(item).find(
+      ([k, v]) => k !== "_id" && typeof v === "string" && v,
+    );
+    return (first?.[1] as string) || `Item ${i + 1}`;
   };
 
   return (
@@ -267,7 +277,7 @@ export function ArrayField({
             strategy={verticalListSortingStrategy}
           >
             <ItemGroup>
-              {value.map((item, i) => (
+              {stableValue.map((item, i) => (
                 <SortableItem
                   key={itemIds[i]}
                   id={itemIds[i]}

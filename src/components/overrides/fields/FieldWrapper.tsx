@@ -17,8 +17,7 @@ import {
 type BreadcrumbSegment = { label: string; onSelect?: () => void };
 
 function useBreadcrumbs(): BreadcrumbSegment[] {
-  const { appState, dispatch, selectedItem, getParentById, getSelectorForId } =
-    usePuck();
+  const { appState, dispatch, selectedItem, getParentById } = usePuck();
   const { itemSelector } = appState.ui;
 
   const selectRoot = () =>
@@ -36,16 +35,13 @@ function useBreadcrumbs(): BreadcrumbSegment[] {
     return [{ label: "Page", onSelect: selectRoot }, { label: selectedType }];
   }
 
-  // Nested component — parent exists
+  // Nested component — show parent type as intermediate crumb when available
   const parentType = (parent as any).type ?? "Component";
-  let parentSelector: ReturnType<typeof getSelectorForId> = undefined;
-  try {
-    parentSelector = getSelectorForId((parent as any).props?.id ?? "");
-  } catch {
-    parentSelector = undefined;
-  }
-
-  return [{ label: "Page", onSelect: selectRoot }, { label: selectedType }];
+  return [
+    { label: "Page", onSelect: selectRoot },
+    { label: parentType },
+    { label: selectedType },
+  ];
 }
 
 // fields override — exact Puck signature: { children, isLoading, itemSelector }
@@ -111,7 +107,6 @@ export function FieldLabel({
   readOnly?: boolean;
   className?: string;
 }): React.ReactElement {
-  console.log("Lable type", labelIcon);
   const El = el ?? "div";
   return (
     <TooltipProvider>

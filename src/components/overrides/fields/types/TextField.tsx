@@ -35,7 +35,7 @@ export function TextField({
       if (local !== value) onChange(local);
     }, 200);
     return () => clearTimeout(timer);
-  }, [local]);
+  }, [local, value, onChange]);
 
   return (
     <FieldLabel label={label ?? ""} labelIcon={labelIcon} readOnly={readOnly}>
