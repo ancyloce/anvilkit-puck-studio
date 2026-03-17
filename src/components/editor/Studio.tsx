@@ -2,9 +2,6 @@
 import * as React from "react";
 import { Puck } from "@puckeditor/core";
 import type { Config, Data, Overrides } from "@puckeditor/core";
-import { createAiPlugin } from "@puckeditor/plugin-ai";
-
-import "@puckeditor/plugin-ai/styles.css";
 import "@puckeditor/core/puck.css";
 
 import { puckOverrides } from "../overrides/index";
@@ -77,15 +74,25 @@ export function Studio({
     }),
   ).current;
 
-  const aiPlugin = React.useMemo(
-    () => createAiPlugin({ host: aiHost }),
-    [aiHost],
-  );
+  type AiPlugin = Awaited<ReturnType<typeof import("@puckeditor/plugin-ai")["createAiPlugin"]>>;
+  const [aiPlugin, setAiPlugin] = React.useState<AiPlugin | null>(null);
+
+  React.useEffect(() => {
+    if (!aiHost) return;
+    let cancelled = false;
+    import("@puckeditor/plugin-ai").then(({ createAiPlugin }) => {
+      if (cancelled) return;
+      // @ts-expect-error — CSS import resolved by bundler, not TS
+      import("@puckeditor/plugin-ai/styles.css").catch(() => {});
+      setAiPlugin(createAiPlugin({ host: aiHost }));
+    });
+    return () => { cancelled = true; };
+  }, [aiHost]);
 
   // Merge: ai plugin preview override → puckOverrides defaults → consumer extensions win
   const mergedOverrides: Partial<Overrides> = React.useMemo(
-    () => ({ ...aiPlugin.overrides, ...puckOverrides, ...overrideExtensions }),
-    [aiPlugin.overrides, overrideExtensions],
+    () => ({ ...(aiPlugin?.overrides ?? {}), ...puckOverrides, ...overrideExtensions }),
+    [aiPlugin, overrideExtensions],
   );
 
   return (
@@ -98,10 +105,10 @@ export function Studio({
             onPublish={onPublish}
             onChange={onChange}
             overrides={mergedOverrides}
-            plugins={[aiPlugin]}
+            plugins={aiPlugin ? [aiPlugin] : []}
           >
             <EditorLayout
-              aiPanel={aiPlugin.render()}
+              aiPanel={aiPlugin?.render()}
               images={images}
               copywritings={copywritings}
             />
