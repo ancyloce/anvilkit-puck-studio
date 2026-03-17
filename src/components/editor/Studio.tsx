@@ -7,8 +7,7 @@ import "@puckeditor/core/puck.css";
 import { puckOverrides } from "../overrides/index";
 import { EditorLayout } from "../layout/Layout";
 
-import type { ImagesProps } from "../layout/sidebar/library/ImageLibrary";
-import type { CopywritingProps } from "../layout/sidebar/library/CopyLibrary";
+import type { ImagesProps, CopywritingProps } from "@/types/public";
 export type { ImagesProps, CopywritingProps };
 
 import { createEditorUiStore } from "@/store/ui";
@@ -73,6 +72,11 @@ export function Studio({
       messages: messages ?? defaultMessages,
     }),
   ).current;
+
+  // Keep i18n store in sync when locale/messages props change after mount
+  React.useEffect(() => {
+    i18nStore.getState().setLocale(locale ?? "zh", messages ?? defaultMessages);
+  }, [locale, messages, i18nStore]);
 
   type AiPlugin = Awaited<ReturnType<typeof import("@puckeditor/plugin-ai")["createAiPlugin"]>>;
   const [aiPlugin, setAiPlugin] = React.useState<AiPlugin | null>(null);
