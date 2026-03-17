@@ -22,12 +22,3 @@ export { createEditorUiStore, createEditorI18nStore } from "./store/index";
 export { EditorUiStoreProvider, useEditorUiStoreApi } from "./store/ui-context";
 export { EditorI18nStoreProvider, useEditorI18nStoreApi } from "./store/i18n-context";
 export { defaultMessages } from "./store/i18n-defaults";
-
-/**
- * @deprecated Use createEditorUiStore() via EditorUiStoreProvider instead.
- * This singleton will be removed in the next minor version.
- */
-export { uiStore } from "./store/index";
-
-/** @deprecated Use EditorUiStore instead. */
-export type { UIStore } from "./store/index";
