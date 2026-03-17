@@ -1,6 +1,8 @@
 import { createStore } from "zustand";
 import { persist } from "zustand/middleware";
 
+export type ActiveTab = "insert" | "layer" | "image" | "text" | "copilot";
+
 interface DrawerSlice {
   drawerSearch: string;
   setDrawerSearch: (q: string) => void;
@@ -9,8 +11,8 @@ interface DrawerSlice {
 }
 
 interface AsideSlice {
-  activeTab: string;
-  setActiveTab: (tab: string) => void;
+  activeTab: ActiveTab;
+  setActiveTab: (tab: ActiveTab) => void;
 }
 
 interface OutlineSlice {
@@ -49,7 +51,6 @@ export function createEditorUiStore(storeId: string) {
         toggleTheme: () =>
           set((s) => {
             const next = s.theme === "light" ? "dark" : "light";
-            document.documentElement.classList.toggle("dark", next === "dark");
             return { theme: next };
           }),
       }),
