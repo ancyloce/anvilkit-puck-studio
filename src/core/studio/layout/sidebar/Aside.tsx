@@ -31,12 +31,16 @@ export function Aside() {
           <TabsList className="flex-col h-auto bg-transparent gap-2">
             {tabs.map(({ value, icon, label }) => (
               <Tooltip key={value}>
-                <TooltipTrigger asChild>
-                  <span>
-                    <TabsTab value={value} className="p-2">
-                      {icon}
-                    </TabsTab>
-                  </span>
+                <TooltipTrigger
+                  render={
+                    <TabsTab
+                      value={value}
+                      className="p-2"
+                      aria-label={label}
+                    />
+                  }
+                >
+                  {icon}
                 </TooltipTrigger>
                 <TooltipContent side="right">{label}</TooltipContent>
               </Tooltip>

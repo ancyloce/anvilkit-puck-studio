@@ -127,7 +127,15 @@ export function FieldLabel({
           </Label>
           {label && (
             <Tooltip>
-              <TooltipTrigger asChild>
+              <TooltipTrigger
+                aria-label={label}
+                render={
+                  <button
+                    type="button"
+                    className="inline-flex cursor-help items-center justify-center text-muted-foreground/60 transition-colors hover:text-muted-foreground"
+                  />
+                }
+              >
                 <Info className="h-3 w-3 text-muted-foreground/60 cursor-help" />
               </TooltipTrigger>
               <TooltipContent side="right">{label}</TooltipContent>

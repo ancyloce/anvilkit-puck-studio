@@ -65,31 +65,35 @@ export const Header = () => {
           </div>
           <div className="flex items-center justify-center gap-2 h-full ml-auto">
             <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  disabled={!history.hasPast}
-                  onClick={() => history.back()}
-                  aria-label={undo}
-                >
-                  <Undo2 className="h-4 w-4" />
-                </Button>
+              <TooltipTrigger
+                render={
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    disabled={!history.hasPast}
+                    onClick={() => history.back()}
+                    aria-label={undo}
+                  />
+                }
+              >
+                <Undo2 className="h-4 w-4" />
               </TooltipTrigger>
               <TooltipContent>{undoTooltip}</TooltipContent>
             </Tooltip>
 
             <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  disabled={!history.hasFuture}
-                  onClick={() => history.forward()}
-                  aria-label={redo}
-                >
-                  <Redo2 className="h-4 w-4" />
-                </Button>
+              <TooltipTrigger
+                render={
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    disabled={!history.hasFuture}
+                    onClick={() => history.forward()}
+                    aria-label={redo}
+                  />
+                }
+              >
+                <Redo2 className="h-4 w-4" />
               </TooltipTrigger>
               <TooltipContent>{redoTooltip}</TooltipContent>
             </Tooltip>
@@ -106,10 +110,20 @@ export const Header = () => {
 
             <DropdownMenu>
               <Tooltip>
-                <TooltipTrigger asChild>
-                  <DropdownMenuTrigger render={<Button variant="ghost" size="icon" aria-label={exportLabel} />}>
-                    <Download className="h-4 w-4" />
-                  </DropdownMenuTrigger>
+                <TooltipTrigger
+                  render={
+                    <DropdownMenuTrigger
+                      render={
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          aria-label={exportLabel}
+                        />
+                      }
+                    />
+                  }
+                >
+                  <Download className="h-4 w-4" />
                 </TooltipTrigger>
                 <TooltipContent>{exportLabel}</TooltipContent>
               </Tooltip>
@@ -129,10 +143,17 @@ export const Header = () => {
             <Separator orientation="vertical" className="h-5 mx-1" />
 
             <Tooltip>
-              <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon" onClick={toggleTheme} aria-label={themeLabel}>
-                  {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-                </Button>
+              <TooltipTrigger
+                render={
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={toggleTheme}
+                    aria-label={themeLabel}
+                  />
+                }
+              >
+                {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
               </TooltipTrigger>
               <TooltipContent>{themeLabel}</TooltipContent>
             </Tooltip>
@@ -140,11 +161,11 @@ export const Header = () => {
             <Separator orientation="vertical" className="h-5 mx-1" />
 
             <Tooltip>
-              <TooltipTrigger asChild>
-                <Button size="sm" aria-label={publish}>
-                  <Send className="h-4 w-4" />
-                  {publish}
-                </Button>
+              <TooltipTrigger
+                render={<Button size="sm" aria-label={publish} />}
+              >
+                <Send className="h-4 w-4" />
+                {publish}
               </TooltipTrigger>
               <TooltipContent>{publish}</TooltipContent>
             </Tooltip>
