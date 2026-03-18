@@ -27,7 +27,7 @@ Opinionated Puck editor chrome and override pack built with React 19, `@base-ui/
 | `react` | `^19.2.4` |
 | `react-dom` | `^19.2.4` |
 | `@puckeditor/core` | `^0.21.1` |
-| `@base-ui/react` | `^1.2.0` |
+| `@base-ui/react` | `^1.3.0` |
 | `tailwindcss` | `^4.2.1` |
 
 `next` is used only by the local demo app in [`app/`](./app) and is not imported from the publishable library code in [`src/`](./src).
