@@ -35,7 +35,7 @@
     "./dist/styles.css"
   ],
   "scripts": {
-    "build": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\" && tsup && node scripts/build-styles.mjs && node scripts/validate-package-exports.mjs",
+    "build": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\" && tsup && node scripts/build-styles.mjs && node scripts/link-package-styles.mjs && node scripts/validate-package-exports.mjs",
     "dev": "next dev",
     "lint": "tsc --noEmit && eslint src",
     "lint:types": "tsc --noEmit",

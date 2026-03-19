@@ -32,7 +32,7 @@ Opinionated Puck editor chrome and override pack built with React 19, `@base-ui/
 `next` is used only by the local demo app in [`app/`](./app) and is not imported from the publishable library code in [`src/`](./src).
 
 Styles note:
-`@anvilkit/puck-studio/styles.css` is a compiled bundle. Import it once in your app and the package UI will keep its styling without requiring your app to scan this package with Tailwind.
+The root runtime entrypoints now auto-load the compiled package stylesheet. `import "@anvilkit/puck-studio/styles.css"` is still available if you want to load the CSS explicitly, but `import { Studio } from "@anvilkit/puck-studio"` and `import { puckOverrides } from "@anvilkit/puck-studio/overrides"` already bring the package styles with them.
 
 ## Installation
 
@@ -52,7 +52,6 @@ The package publishes:
 `Studio` is the higher-level entry point. It mounts `Puck`, injects Puck base CSS, creates the UI and i18n stores, merges the default overrides, and renders the custom shell.
 
 ```tsx
-import "@anvilkit/puck-studio/styles.css";
 import { Studio } from "@anvilkit/puck-studio";
 
 export function Editor({ config, data, setData, save }) {
@@ -172,7 +171,6 @@ Use `puckOverrides` when you want the styled Puck surfaces without the full `Stu
 
 ```tsx
 import "@puckeditor/core/puck.css";
-import "@anvilkit/puck-studio/styles.css";
 
 import { Puck } from "@puckeditor/core";
 import { puckOverrides } from "@anvilkit/puck-studio";
