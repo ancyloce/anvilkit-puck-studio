@@ -18,7 +18,7 @@ Opinionated Puck editor chrome and override pack built with React 19, `@base-ui/
 - Persisted locale state plus message overrides
 - Light/dark theme sync between the host document and the Puck iframe
 - Optional AI copilot panel when `aiHost` is provided
-- Exported CSS tokens in `@anvilkit/puck-studio/styles.css`
+- Exported compiled stylesheet in `@anvilkit/puck-studio/styles.css`
 
 ## Requirements
 
@@ -28,12 +28,11 @@ Opinionated Puck editor chrome and override pack built with React 19, `@base-ui/
 | `react-dom` | `^19.2.4` |
 | `@puckeditor/core` | `^0.21.1` |
 | `@base-ui/react` | `^1.3.0` |
-| `tailwindcss` | `^4.2.1` |
 
 `next` is used only by the local demo app in [`app/`](./app) and is not imported from the publishable library code in [`src/`](./src).
 
-Tailwind note:
-This package exports design tokens and class names, not a standalone compiled utility bundle. Your app still needs Tailwind v4 configured. If your Tailwind setup does not scan dependency code automatically, include this package in the sources Tailwind reads.
+Styles note:
+`@anvilkit/puck-studio/styles.css` is a compiled bundle. Import it once in your app and the package UI will keep its styling without requiring your app to scan this package with Tailwind.
 
 ## Installation
 
@@ -46,7 +45,7 @@ The package publishes:
 - root exports from `@anvilkit/puck-studio`
 - overrides-only exports from `@anvilkit/puck-studio/overrides`
 - deprecated compatibility exports from `@anvilkit/puck-studio/legacy`
-- design tokens from `@anvilkit/puck-studio/styles.css`
+- compiled package styles from `@anvilkit/puck-studio/styles.css`
 
 ## Recommended Usage: `Studio`
 

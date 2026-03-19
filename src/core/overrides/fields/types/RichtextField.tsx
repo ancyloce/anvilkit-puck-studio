@@ -35,7 +35,7 @@ export function RichtextField({ value, onChange, readOnly, label }: RichtextFiel
     <FieldLabel label={label ?? ""} readOnly={readOnly}>
       <div className="flex flex-col gap-1 rounded-md border border-input overflow-hidden">
         {!readOnly && (
-          <div className="flex items-center gap-0.5 border-b px-1 py-0.5 bg-muted/30">
+          <div className="flex items-center gap-0.5 border-b border-border px-1 py-0.5 bg-muted/30">
             <Toggle size="sm" onPressedChange={() => exec("bold")} aria-label={boldLabel}>
               <Bold className="h-3.5 w-3.5" />
             </Toggle>

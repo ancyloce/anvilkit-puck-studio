@@ -67,7 +67,7 @@ export function ExternalField({ value, onChange, fetchList, readOnly, label }: E
           )}
         </CommandList>
         {value != null && (
-          <div className="border-t px-3 py-1.5 text-xs text-muted-foreground truncate">
+          <div className="border-t border-border px-3 py-1.5 text-xs text-muted-foreground truncate">
             Selected: <span className="font-medium text-foreground">{selectedLabel}</span>
           </div>
         )}

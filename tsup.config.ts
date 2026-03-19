@@ -39,10 +39,4 @@ export default defineConfig([
     splitting: false,
     external: sharedExternal,
   },
-  {
-    entry: { styles: "src/styles.css" },
-    format: ["esm"],
-    sourcemap: false,
-    clean: false,
-  },
 ]);

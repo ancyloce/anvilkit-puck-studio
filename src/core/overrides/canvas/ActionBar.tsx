@@ -16,7 +16,7 @@ export function ActionBar({
 }): React.ReactElement {
   return (
     <TooltipProvider>
-      <div className="flex items-center gap-0.5 rounded-md border bg-background shadow-md px-1 py-0.5">
+      <div className="flex items-center gap-0.5 rounded-md border border-border bg-background shadow-md px-1 py-0.5">
         {label && (
           <>
             <span className="px-2 text-xs font-medium text-muted-foreground truncate max-w-[120px]">
