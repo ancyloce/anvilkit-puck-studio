@@ -1,3 +1,9 @@
+## [0.3.1](https://github.com/ancyloce/anvilkit-studio/compare/v0.3.0...v0.3.1) (2026-03-19)
+
+### Refactors
+
+* Update package.json to adjust module paths for CommonJS and ESM formats, modify build script for better artifact validation, and add validate-package-exports script to ensure package export targets are correctly defined. ([4f62af4](https://github.com/ancyloce/anvilkit-studio/commit/4f62af4fe0ccddf9354efb9f6c36e250da0bb4a9))
+
 ## [0.3.0](https://github.com/ancyloce/anvilkit-studio/compare/v0.2.0...v0.3.0) (2026-03-19)
 
 ### Features
