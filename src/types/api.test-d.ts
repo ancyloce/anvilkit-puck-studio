@@ -10,6 +10,7 @@ import {
   expectAssignable,
   expectNotAssignable,
 } from "tsd";
+import type { MouseEventHandler } from "react";
 
 import type {
   StudioProps,
@@ -33,6 +34,7 @@ expectType<ImagesProps | undefined>(studioProps.images);
 expectType<CopywritingProps | undefined>(studioProps.copywritings);
 expectType<Locale | undefined>(studioProps.locale);
 expectType<Messages | undefined>(studioProps.messages);
+expectType<MouseEventHandler<HTMLButtonElement> | undefined>(studioProps.onBack);
 
 // ─── ImageItem ───────────────────────────────────────────────────────────────
 declare const imageItem: ImageItem;

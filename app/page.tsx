@@ -212,6 +212,7 @@ export default function EditorPage() {
           setData(d);
           console.log("Published:", d);
         }}
+        onBack={() => console.log("back")}
         onChange={setData}
         aiHost="/api/puck-ai"
         className="flex-1 overflow-hidden"

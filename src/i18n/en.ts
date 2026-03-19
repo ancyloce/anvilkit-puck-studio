@@ -1,6 +1,7 @@
 import type { Messages } from "../store/i18n";
 
 export const defaultMessages: Messages = {
+  "header.back": "Back",
   "header.publish": "Publish",
   "header.undo": "Undo",
   "header.undo.tooltip": "Undo (Ctrl+Z)",

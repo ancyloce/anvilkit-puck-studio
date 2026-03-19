@@ -6,24 +6,26 @@ import { useActiveTab } from "@/store/hooks";
 import { ImageLibrary } from "./sidebar/library/ImageLibrary";
 import { CopyLibrary } from "./sidebar/library/CopyLibrary";
 import type { ImagesProps, CopywritingProps } from "@/types/public";
-import type { ReactElement } from "react";
+import type { MouseEventHandler, ReactElement } from "react";
 
 interface EditorLayoutProps {
   aiPanel?: ReactElement;
   images?: ImagesProps;
   copywritings?: CopywritingProps;
+  onBack?: MouseEventHandler<HTMLButtonElement>;
 }
 
 export const EditorLayout = ({
   aiPanel,
   images,
   copywritings,
+  onBack,
 }: EditorLayoutProps) => {
   const activeTab = useActiveTab();
 
   return (
     <div className="max-sm:hidden overflow-hidden h-screen">
-      <Header />
+      <Header onBack={onBack} />
       <motion.div className="relative w-full flex border-r border-neutral-200 dark:border-neutral-800/80 bg-white/60 dark:bg-neutral-950/80 backdrop-blur-md ml-0 h-[calc(100vh-54px)]">
         <Aside></Aside>
         <div className="relative h-full flex flex-col overflow-x-hidden overflow-y-auto border-r border-neutral-200 dark:border-neutral-800/80 w-[240px]">

@@ -31,8 +31,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export const Header = () => {
+interface HeaderProps {
+  onBack?: React.MouseEventHandler<HTMLButtonElement>;
+}
+
+export const Header = ({ onBack }: HeaderProps) => {
   const { history, appState } = usePuck();
+  const back = useMsg("header.back");
   const publish = useMsg("header.publish");
   const undo = useMsg("header.undo");
   const undoTooltip = useMsg("header.undo.tooltip");
@@ -57,9 +62,23 @@ export const Header = () => {
           </div>
         </div>
         <div className="relative flex flex-1 w-full px-2">
-          <Button variant="ghost" size="icon">
-            <ArrowLeft className="h-4 w-4" />
-          </Button>
+          {onBack ? (
+            <Tooltip>
+              <TooltipTrigger
+                render={
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={onBack}
+                    aria-label={back}
+                  />
+                }
+              >
+                <ArrowLeft className="h-4 w-4" />
+              </TooltipTrigger>
+              <TooltipContent>{back}</TooltipContent>
+            </Tooltip>
+          ) : null}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none text-sm font-medium">
             {appState?.data?.root?.props?.title || ""}
           </div>

@@ -1,6 +1,7 @@
 import type { Messages } from "../store/i18n";
 
 export const defaultMessages: Messages = {
+  "header.back": "返回",
   "header.publish": "发布",
   "header.undo": "撤销",
   "header.undo.tooltip": "撤销 (Ctrl+Z)",

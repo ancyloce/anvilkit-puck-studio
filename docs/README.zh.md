@@ -76,6 +76,7 @@ export function Editor({ config, data, setData, save }) {
 |---|---|
 | `config`, `data`, `onPublish` | 标准 Puck 输入 |
 | `onChange` | 可选的 Puck `onChange` 透传 |
+| `onBack` | 可选的 header 返回按钮点击回调；提供后才会渲染返回按钮 |
 | `overrideExtensions` | 最后参与合并，因此你的 overrides 优先级高于包内默认值 |
 | `images` | 为图片库提供初始项或固定项 |
 | `copywritings` | 为文案库提供固定片段 |

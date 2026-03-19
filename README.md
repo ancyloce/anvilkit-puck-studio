@@ -76,6 +76,7 @@ export function Editor({ config, data, setData, save }) {
 |---|---|
 | `config`, `data`, `onPublish` | Standard Puck inputs |
 | `onChange` | Optional Puck `onChange` passthrough |
+| `onBack` | Optional header back-button click handler; when provided, the back button is rendered |
 | `overrideExtensions` | Merged last, so your overrides win over the packaged defaults |
 | `images` | Seeds or fixed items for the image library |
 | `copywritings` | Fixed snippets for the copy library |

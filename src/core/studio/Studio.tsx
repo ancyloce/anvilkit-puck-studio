@@ -35,6 +35,7 @@ export interface StudioProps {
   aiHost?: string;
 
   // Studio shell customization
+  onBack?: React.MouseEventHandler<HTMLButtonElement>;
   headerSlot?: React.ReactNode;
   drawerHeaderSlot?: React.ReactNode;
   className?: string;
@@ -59,6 +60,7 @@ export function Studio({
   overrideExtensions,
   aiHost,
   className,
+  onBack,
   images,
   copywritings,
   storeId,
@@ -113,6 +115,7 @@ export function Studio({
           >
             <EditorLayout
               aiPanel={aiPlugin?.render()}
+              onBack={onBack}
               images={images}
               copywritings={copywritings}
             />
