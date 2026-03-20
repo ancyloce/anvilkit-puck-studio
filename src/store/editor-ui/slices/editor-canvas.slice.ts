@@ -1,3 +1,7 @@
+import {
+  DEFAULT_CANVAS_ZOOM_CONFIG,
+  type CanvasZoomConfig,
+} from "@/lib/canvas/zoom";
 import type { LibraryDragType } from "@/features/library-dnd/drop-contract";
 import type { EditorUiSliceCreator } from "../editor-ui.types";
 
@@ -21,6 +25,9 @@ export function isCanvasViewport(value: string): value is CanvasViewport {
 export interface EditorCanvasSlice {
   canvasViewport: EditorCanvasViewport;
   setCanvasViewport: (viewport: EditorCanvasViewport) => void;
+  canvasZoomConfig: CanvasZoomConfig;
+  setCanvasZoomConfig: (zoomConfig: CanvasZoomConfig) => void;
+  setCanvasZoom: (zoom: number) => void;
   canvasLibraryDragType: LibraryDragType | null;
   setCanvasLibraryDragType: (type: LibraryDragType | null) => void;
 }
@@ -28,6 +35,15 @@ export interface EditorCanvasSlice {
 export const createEditorCanvasSlice: EditorUiSliceCreator<EditorCanvasSlice> = (set) => ({
   canvasViewport: "desktop",
   setCanvasViewport: (canvasViewport) => set({ canvasViewport }),
+  canvasZoomConfig: DEFAULT_CANVAS_ZOOM_CONFIG,
+  setCanvasZoomConfig: (canvasZoomConfig) => set({ canvasZoomConfig }),
+  setCanvasZoom: (zoom) =>
+    set((state) => ({
+      canvasZoomConfig: {
+        ...state.canvasZoomConfig,
+        zoom,
+      },
+    })),
   canvasLibraryDragType: null,
   setCanvasLibraryDragType: (canvasLibraryDragType) => set({ canvasLibraryDragType }),
 });

@@ -14,6 +14,12 @@ export {
   useToggleOutlineItem,
   useCanvasViewport,
   useSetCanvasViewport,
+  useCanvasZoomConfig,
+  useCanvasZoom,
+  useCanvasAutoZoom,
+  useCanvasRootHeight,
+  useSetCanvasZoomConfig,
+  useSetCanvasZoom,
   useCanvasLibraryDragType,
   useSetCanvasLibraryDragType,
   useTheme,
@@ -36,3 +42,4 @@ export {
 } from "./slices/editor-canvas.slice";
 export type { CanvasViewport, EditorCanvasViewport } from "./slices/editor-canvas.slice";
 export type { EditorTheme } from "./slices/editor-theme.slice";
+export type { CanvasZoomConfig } from "@/lib/canvas/zoom";

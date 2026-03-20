@@ -41,6 +41,30 @@ export function useSetCanvasViewport() {
   return useStore(useEditorUiStoreApi(), (state) => state.setCanvasViewport);
 }
 
+export function useCanvasZoomConfig() {
+  return useStore(useEditorUiStoreApi(), (state) => state.canvasZoomConfig);
+}
+
+export function useCanvasZoom() {
+  return useStore(useEditorUiStoreApi(), (state) => state.canvasZoomConfig.zoom);
+}
+
+export function useCanvasAutoZoom() {
+  return useStore(useEditorUiStoreApi(), (state) => state.canvasZoomConfig.autoZoom);
+}
+
+export function useCanvasRootHeight() {
+  return useStore(useEditorUiStoreApi(), (state) => state.canvasZoomConfig.rootHeight);
+}
+
+export function useSetCanvasZoomConfig() {
+  return useStore(useEditorUiStoreApi(), (state) => state.setCanvasZoomConfig);
+}
+
+export function useSetCanvasZoom() {
+  return useStore(useEditorUiStoreApi(), (state) => state.setCanvasZoom);
+}
+
 export function useCanvasLibraryDragType() {
   return useStore(useEditorUiStoreApi(), (state) => state.canvasLibraryDragType);
 }
