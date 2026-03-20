@@ -1,3 +1,19 @@
+## [0.4.0](https://github.com/ancyloce/anvilkit-studio/compare/v0.3.4...v0.4.0) (2026-03-20)
+
+### Features
+
+* Add TypeScript declaration for external CSS module "@puckeditor/plugin-ai/styles.css" to support styling integration ([354fc53](https://github.com/ancyloce/anvilkit-studio/commit/354fc5304e7f35602f0609a852baf33553ae0396))
+* Enhance ImageLibrary component with pagination support and virtual scrolling for improved performance ([47458dd](https://github.com/ancyloce/anvilkit-studio/commit/47458ddf8e62aba2f6b8593f5165ada69083d98d))
+* Implement pagination and search functionality in CopyLibrary component for improved user experience ([910ac43](https://github.com/ancyloce/anvilkit-studio/commit/910ac433fcb55db35d142fac203ebc686ccb2827))
+* Introduce new data structures and constants for image and copy libraries, enhancing demo capabilities and organization in the Studio component ([9448598](https://github.com/ancyloce/anvilkit-studio/commit/9448598d33c75fbf083a927d3c3a689334080ab9))
+
+### Refactors
+
+* Extend ScrollArea component to accept viewportRef prop for improved flexibility ([f4eb40c](https://github.com/ancyloce/anvilkit-studio/commit/f4eb40c18f1f11c62c85307c1c570936c1949842))
+* Remove TypeScript error suppression for CSS import in Studio component to improve code clarity ([faf1edd](https://github.com/ancyloce/anvilkit-studio/commit/faf1edd0d49d75058025b1161f4e0cbded1e929d))
+* Replace usePuck with usePuckSelector in multiple components for improved state management and code consistency ([a0a6b36](https://github.com/ancyloce/anvilkit-studio/commit/a0a6b3658eb36e1a7a90c963f404ac60e5cd9af5))
+* Simplify EditorDrawer component by introducing DrawerGrid for layout management and removing legacy EditorComponents export ([c6dc209](https://github.com/ancyloce/anvilkit-studio/commit/c6dc2094c1c4182e4b74a052708090170081a1ff))
+
 ## [0.3.4](https://github.com/ancyloce/anvilkit-studio/compare/v0.3.3...v0.3.4) (2026-03-19)
 
 ### Refactors
