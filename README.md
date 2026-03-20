@@ -90,7 +90,7 @@ export function Editor({
 | `onBack` | Optional header back-button click handler; when provided, the back button is rendered |
 | `onSaveDraft`, `isSavingDraft`, `lastSavedAt` | Wires the header draft action to your persistence flow and lets the host control lightweight save status |
 | `onOpenShare`, `onOpenCollaborators`, `onExportJson` | Lets host apps replace secondary header actions with real share, collaborator, or export workflows |
-| `onHeaderAction` | Optional unified callback for header action reporting (`undo`, `redo`, `save-draft`, `publish`, `open-share`, `open-collaborators`, `export-json`, `toggle-theme`) |
+| `onHeaderAction` | Optional unified callback for studio chrome action reporting (`undo`, `redo`, `save-draft`, `publish`, `open-share`, `open-collaborators`, `export-json`, `toggle-theme`) |
 | `isPublishing` | Optional loading state for the publish button |
 | `overrideExtensions` | Merged last, so your overrides win over the packaged defaults |
 | `images` | Configures image library `items`, `seeds`, or paged loading |
@@ -109,9 +109,9 @@ Merge order for overrides is:
 
 That means consumer overrides take precedence.
 
-### Header Actions
+### Studio Chrome
 
-The studio header keeps undo/redo, theme toggle, and collaborators visible. Save and publish are grouped behind a single `Save / Publish` trigger that opens a menu for `Save Draft` and `Publish`, while secondary actions stay in `More`. Every action uses the current Puck data from the editor state.
+The studio keeps viewport switching plus undo/redo in a canvas action bar above the preview. The header now keeps theme toggle, collaborators, save/publish, and `More`. Every action still uses the current Puck data from the editor state, and `onHeaderAction` continues to report undo/redo even though those controls now live in the canvas chrome.
 
 ```tsx
 <Studio

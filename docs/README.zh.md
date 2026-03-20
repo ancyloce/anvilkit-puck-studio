@@ -90,7 +90,7 @@ export function Editor({
 | `onBack` | 可选的 header 返回按钮点击回调；提供后才会渲染返回按钮 |
 | `onSaveDraft`, `isSavingDraft`, `lastSavedAt` | 把 header 中的草稿保存动作接入你的持久化流程，并允许 host 控制轻量保存状态 |
 | `onOpenShare`, `onOpenCollaborators`, `onExportJson` | 允许 host 用真实的分享、协作者和导出流程替换内置次级动作 |
-| `onHeaderAction` | 可选的统一 header 动作上报（`undo`、`redo`、`save-draft`、`publish`、`open-share`、`open-collaborators`、`export-json`、`toggle-theme`） |
+| `onHeaderAction` | 可选的统一编辑器壳层动作上报（`undo`、`redo`、`save-draft`、`publish`、`open-share`、`open-collaborators`、`export-json`、`toggle-theme`） |
 | `isPublishing` | 发布按钮的可选加载状态 |
 | `overrideExtensions` | 最后参与合并，因此你的 overrides 优先级高于包内默认值 |
 | `images` | 为图片库配置 `items`、`seeds` 或分页加载 |
@@ -109,9 +109,9 @@ overrides 的合并顺序是：
 
 这意味着 consumer 传入的 overrides 拥有最高优先级。
 
-### Header 动作
+### 编辑器壳层动作
 
-当前 header 会直接保留 undo/redo、主题切换和协作者入口。保存与发布合并为一个 `保存 / 发布` 触发器，点击后会弹出菜单供用户选择 `保存草稿` 或 `发布`；其余次级动作继续放在 `More` 菜单里。所有动作都会使用当前编辑器中的 Puck data。
+当前编辑器会把 viewport 切换和 undo/redo 放到预览区域上方的 canvas action bar 中。header 保留主题切换、协作者、保存/发布和 `More` 菜单。所有动作仍然会使用当前编辑器中的 Puck data，并且 `onHeaderAction` 仍会继续上报 undo/redo，只是它们现在位于 canvas chrome 中。
 
 ```tsx
 <Studio
