@@ -18,11 +18,9 @@ import {
   Link2,
   LoaderCircle,
   Moon,
-  Redo2,
   Save,
   Send,
   Sun,
-  Undo2,
 } from "lucide-react";
 import { useLocale, useMsg, useTheme, useToggleTheme } from "@/store/hooks";
 import { useThemeSync } from "@/features/theme/useThemeSync";
@@ -44,6 +42,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import type { StudioActionHandler, StudioHeaderAction } from "../../types";
+import { useReportStudioAction } from "../../useReportStudioAction";
 
 interface HeaderProps {
   onBack?: React.MouseEventHandler<HTMLButtonElement>;
@@ -113,11 +112,11 @@ export const Header = ({
   onExportJson,
   onHeaderAction,
 }: HeaderProps) => {
-  const history = usePuckSelector((state) => state.history);
   const pageTitle = usePuckSelector(
     (state) => state.appState?.data?.root?.props?.title,
   );
   const puckData = usePuckSelector((state) => state.appState.data);
+  const reportStudioAction = useReportStudioAction();
   const locale = useLocale();
   const back = useMsg("header.back");
   const publish = useMsg("header.publish");
@@ -127,10 +126,6 @@ export const Header = ({
   const saveDraftSavedAt = useMsg("header.saveDraft.savedAt");
   const savePublish = useMsg("header.savePublish");
   const savePublishTooltip = useMsg("header.savePublish.tooltip");
-  const undo = useMsg("header.undo");
-  const undoTooltip = useMsg("header.undo.tooltip");
-  const redo = useMsg("header.redo");
-  const redoTooltip = useMsg("header.redo.tooltip");
   const exportLabel = useMsg("header.export");
   const exportJson = useMsg("header.export.json");
   const shareLabel = useMsg("header.share");
@@ -165,28 +160,11 @@ export const Header = ({
 
   useThemeSync();
 
-  const reportHeaderAction = React.useCallback(
-    (type: StudioHeaderAction["type"]) => {
-      onHeaderAction?.({ type, data: puckData });
-    },
-    [onHeaderAction, puckData],
-  );
-
-  const handleUndo = React.useCallback(() => {
-    history.back();
-    reportHeaderAction("undo");
-  }, [history, reportHeaderAction]);
-
-  const handleRedo = React.useCallback(() => {
-    history.forward();
-    reportHeaderAction("redo");
-  }, [history, reportHeaderAction]);
-
   const handleSaveDraft = React.useCallback(async () => {
     if (!canSaveDraft) return;
 
     setDraftPending(true);
-    reportHeaderAction("save-draft");
+    reportStudioAction("save-draft");
 
     try {
       await onSaveDraft?.(puckData);
@@ -202,11 +180,11 @@ export const Header = ({
     } finally {
       setDraftPending(false);
     }
-  }, [canSaveDraft, lastSavedAt, onSaveDraft, puckData, reportHeaderAction]);
+  }, [canSaveDraft, lastSavedAt, onSaveDraft, puckData, reportStudioAction]);
 
   const handlePublish = React.useCallback(async () => {
     setPublishPending(true);
-    reportHeaderAction("publish");
+    reportStudioAction("publish");
 
     try {
       await onPublish(puckData);
@@ -215,10 +193,10 @@ export const Header = ({
     } finally {
       setPublishPending(false);
     }
-  }, [onPublish, puckData, reportHeaderAction]);
+  }, [onPublish, puckData, reportStudioAction]);
 
   const handleOpenShare = React.useCallback(async () => {
-    reportHeaderAction("open-share");
+    reportStudioAction("open-share");
 
     try {
       if (onOpenShare) {
@@ -233,12 +211,12 @@ export const Header = ({
         error,
       );
     }
-  }, [onOpenShare, puckData, reportHeaderAction]);
+  }, [onOpenShare, puckData, reportStudioAction]);
 
   const handleOpenCollaborators = React.useCallback(async () => {
     if (!canOpenCollaborators) return;
 
-    reportHeaderAction("open-collaborators");
+    reportStudioAction("open-collaborators");
 
     try {
       await onOpenCollaborators?.(puckData);
@@ -248,10 +226,10 @@ export const Header = ({
         error,
       );
     }
-  }, [canOpenCollaborators, onOpenCollaborators, puckData, reportHeaderAction]);
+  }, [canOpenCollaborators, onOpenCollaborators, puckData, reportStudioAction]);
 
   const handleExportJson = React.useCallback(async () => {
-    reportHeaderAction("export-json");
+    reportStudioAction("export-json");
 
     try {
       if (onExportJson) {
@@ -268,12 +246,12 @@ export const Header = ({
         error,
       );
     }
-  }, [onExportJson, puckData, reportHeaderAction]);
+  }, [onExportJson, puckData, reportStudioAction]);
 
   const handleToggleTheme = React.useCallback(() => {
-    reportHeaderAction("toggle-theme");
+    reportStudioAction("toggle-theme");
     toggleTheme();
-  }, [reportHeaderAction, toggleTheme]);
+  }, [reportStudioAction, toggleTheme]);
 
   return (
     <TooltipProvider>
@@ -305,44 +283,6 @@ export const Header = ({
             {pageTitle || ""}
           </div>
           <div className="flex items-center gap-1 h-full ml-auto">
-            <div className="flex items-center gap-1">
-              <Tooltip>
-                <TooltipTrigger
-                  render={
-                    <Button
-                      variant="ghost"
-                      size="icon-sm"
-                      disabled={!history.hasPast}
-                      onClick={handleUndo}
-                      aria-label={undo}
-                    />
-                  }
-                >
-                  <Undo2 className="h-4 w-4" />
-                </TooltipTrigger>
-                <TooltipContent>{undoTooltip}</TooltipContent>
-              </Tooltip>
-
-              <Tooltip>
-                <TooltipTrigger
-                  render={
-                    <Button
-                      variant="ghost"
-                      size="icon-sm"
-                      disabled={!history.hasFuture}
-                      onClick={handleRedo}
-                      aria-label={redo}
-                    />
-                  }
-                >
-                  <Redo2 className="h-4 w-4" />
-                </TooltipTrigger>
-                <TooltipContent>{redoTooltip}</TooltipContent>
-              </Tooltip>
-            </div>
-
-            <Separator orientation="vertical" className="h-5 mx-1" />
-
             <Tooltip>
               <TooltipTrigger
                 render={

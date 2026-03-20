@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
 import { Puck } from "@puckeditor/core";
-import type { Config, Data, Overrides } from "@puckeditor/core";
+import type { Config, Data, Overrides, UiState, Viewports } from "@puckeditor/core";
 import "@puckeditor/core/puck.css";
 
 import { puckOverrides } from "@/core/overrides";
@@ -17,6 +17,49 @@ import { EditorI18nStoreProvider } from "@/store/i18n-context";
 import { defaultMessages } from "@/store/i18n-defaults";
 import type { Locale, Messages } from "@/store/i18n";
 import type { StudioActionHandler, StudioHeaderAction } from "./types";
+import { StudioActionProvider } from "./studio-action-context";
+
+const fullWidthPreviewViewports: Viewports = [
+  {
+    width: "100%",
+    height: "auto",
+  },
+];
+
+const defaultStudioViewportCurrent: UiState["viewports"]["current"] = {
+  width: "100%",
+  height: "auto",
+};
+
+const defaultStudioViewports: UiState["viewports"] = {
+  controlsVisible: false,
+  current: defaultStudioViewportCurrent,
+  options: [],
+};
+
+const defaultStudioUi: Partial<UiState> = {
+  viewports: defaultStudioViewports,
+};
+
+function mergeStudioUi(ui?: Partial<UiState>): Partial<UiState> {
+  const viewports = ui?.viewports;
+  const currentViewport: UiState["viewports"]["current"] = {
+    width: viewports?.current?.width ?? defaultStudioViewportCurrent.width,
+    height: viewports?.current?.height ?? defaultStudioViewportCurrent.height,
+  };
+  const mergedViewports: UiState["viewports"] = {
+    ...defaultStudioViewports,
+    ...viewports,
+    current: currentViewport,
+    options: viewports?.options ?? defaultStudioViewports.options,
+  };
+
+  return {
+    ...defaultStudioUi,
+    ...ui,
+    viewports: mergedViewports,
+  };
+}
 
 export interface StudioProps {
   // Required Puck props
@@ -26,7 +69,7 @@ export interface StudioProps {
 
   // Optional Puck pass-through props
   onChange?: (data: Data) => void;
-  ui?: Record<string, unknown>;
+  ui?: Partial<UiState>;
   onAction?: (action: unknown, appState: unknown) => void;
 
   // Override escape hatches — consumer-provided keys win over defaults
@@ -66,6 +109,7 @@ export function Studio({
   data,
   onPublish,
   onChange,
+  ui,
   onAction,
   overrideExtensions,
   aiHost,
@@ -92,6 +136,7 @@ export function Studio({
       messages: messages ?? defaultMessages,
     }),
   ).current;
+  const mergedUi = React.useMemo(() => mergeStudioUi(ui), [ui]);
 
   // Keep i18n store in sync when locale/messages props change after mount
   React.useEffect(() => {
@@ -119,36 +164,40 @@ export function Studio({
   );
 
   return (
-    <EditorUiStoreProvider value={uiStore}>
-      <EditorI18nStoreProvider value={i18nStore}>
-        <div className={className}>
-          <Puck
-            config={config}
-            data={data}
-            onPublish={onPublish}
-            onChange={onChange}
-            onAction={onAction}
-            overrides={mergedOverrides}
-            plugins={aiPlugin ? [aiPlugin] : []}
-          >
-            <EditorLayout
-              aiPanel={aiPlugin?.render()}
-              onBack={onBack}
-              onSaveDraft={onSaveDraft}
-              isSavingDraft={isSavingDraft}
-              lastSavedAt={lastSavedAt}
+    <StudioActionProvider onHeaderAction={onHeaderAction}>
+      <EditorUiStoreProvider value={uiStore}>
+        <EditorI18nStoreProvider value={i18nStore}>
+          <div className={className}>
+            <Puck
+              config={config}
+              data={data}
               onPublish={onPublish}
-              isPublishing={isPublishing}
-              onOpenShare={onOpenShare}
-              onOpenCollaborators={onOpenCollaborators}
-              onExportJson={onExportJson}
-              onHeaderAction={onHeaderAction}
-              images={images}
-              copywritings={copywritings}
-            />
-          </Puck>
-        </div>
-      </EditorI18nStoreProvider>
-    </EditorUiStoreProvider>
+              onChange={onChange}
+              ui={mergedUi}
+              onAction={onAction}
+              overrides={mergedOverrides}
+              plugins={aiPlugin ? [aiPlugin] : []}
+              viewports={fullWidthPreviewViewports}
+            >
+              <EditorLayout
+                aiPanel={aiPlugin?.render()}
+                onBack={onBack}
+                onSaveDraft={onSaveDraft}
+                isSavingDraft={isSavingDraft}
+                lastSavedAt={lastSavedAt}
+                onPublish={onPublish}
+                isPublishing={isPublishing}
+                onOpenShare={onOpenShare}
+                onOpenCollaborators={onOpenCollaborators}
+                onExportJson={onExportJson}
+                onHeaderAction={onHeaderAction}
+                images={images}
+                copywritings={copywritings}
+              />
+            </Puck>
+          </div>
+        </EditorI18nStoreProvider>
+      </EditorUiStoreProvider>
+    </StudioActionProvider>
   );
 }
