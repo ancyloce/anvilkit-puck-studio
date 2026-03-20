@@ -5,6 +5,7 @@ import { Header } from "./header/Header";
 import { useActiveTab } from "@/store/hooks";
 import { ImageLibrary } from "./sidebar/library/ImageLibrary";
 import { CopyLibrary } from "./sidebar/library/CopyLibrary";
+import { ViewportPreview } from "./ViewportPreview";
 import type { ImagesProps, CopywritingProps } from "@/types/public";
 import type { MouseEventHandler, ReactElement } from "react";
 import type { StudioActionHandler, StudioHeaderAction } from "../types";
@@ -65,9 +66,7 @@ export const EditorLayout = ({
           {activeTab === "text" && <CopyLibrary {...copywritings} />}
           {activeTab === "copilot" && aiPanel}
         </div>
-        <div className="flex-1 h-full overflow-hidden">
-          <Puck.Preview></Puck.Preview>
-        </div>
+        <ViewportPreview />
         <div className="border-l border-neutral-200 dark:border-neutral-800/80  w-[240px]">
           <Puck.Fields></Puck.Fields>
         </div>
