@@ -521,6 +521,8 @@ const pagedCopyDemo: CopywritingProps = {
 export default function EditorPage() {
   const [data, setData] = React.useState<Data>(initialData);
   const [imageDemoMode, setImageDemoMode] = React.useState<ImageDemoMode>("paged");
+  const [isSavingDraft, setIsSavingDraft] = React.useState(false);
+  const [lastSavedAt, setLastSavedAt] = React.useState<number | undefined>();
 
   return (
     <div style={{ height: "100vh", display: "flex", flexDirection: "column" }}>
@@ -595,6 +597,20 @@ export default function EditorPage() {
       <Studio
         config={config}
         data={data}
+        onSaveDraft={async (d) => {
+          setIsSavingDraft(true);
+
+          await new Promise((resolve) => {
+            setTimeout(resolve, 400);
+          });
+
+          setData(d);
+          setLastSavedAt(Date.now());
+          setIsSavingDraft(false);
+          console.log("Draft saved:", d);
+        }}
+        isSavingDraft={isSavingDraft}
+        lastSavedAt={lastSavedAt}
         onPublish={(d) => {
           setData(d);
           console.log("Published:", d);
