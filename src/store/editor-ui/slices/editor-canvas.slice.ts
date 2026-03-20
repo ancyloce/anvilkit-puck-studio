@@ -1,6 +1,8 @@
 import {
   DEFAULT_CANVAS_ZOOM_CONFIG,
   type CanvasZoomConfig,
+  normalizeCanvasRootHeight,
+  normalizeCanvasZoomLevel,
 } from "@/lib/canvas/zoom";
 import type { LibraryDragType } from "@/features/library-dnd/drop-contract";
 import type { EditorUiSliceCreator } from "../editor-ui.types";
@@ -36,12 +38,19 @@ export const createEditorCanvasSlice: EditorUiSliceCreator<EditorCanvasSlice> = 
   canvasViewport: "desktop",
   setCanvasViewport: (canvasViewport) => set({ canvasViewport }),
   canvasZoomConfig: DEFAULT_CANVAS_ZOOM_CONFIG,
-  setCanvasZoomConfig: (canvasZoomConfig) => set({ canvasZoomConfig }),
+  setCanvasZoomConfig: (canvasZoomConfig) =>
+    set({
+      canvasZoomConfig: {
+        autoZoom: normalizeCanvasZoomLevel(canvasZoomConfig.autoZoom),
+        rootHeight: normalizeCanvasRootHeight(canvasZoomConfig.rootHeight),
+        zoom: normalizeCanvasZoomLevel(canvasZoomConfig.zoom),
+      },
+    }),
   setCanvasZoom: (zoom) =>
     set((state) => ({
       canvasZoomConfig: {
         ...state.canvasZoomConfig,
-        zoom,
+        zoom: normalizeCanvasZoomLevel(zoom),
       },
     })),
   canvasLibraryDragType: null,

@@ -40,10 +40,15 @@ export const canvasViewportPresets: Record<EditorCanvasViewport, CanvasViewportP
   },
 };
 
-export function getCanvasViewportPixelWidth(viewport: EditorCanvasViewport): number {
-  return canvasViewportPresets[viewport].width;
+export function getCanvasViewportPixelWidth(
+  viewport: EditorCanvasViewport | string | null | undefined,
+): number {
+  return canvasViewportPresets[viewport as EditorCanvasViewport]?.width ??
+    canvasViewportPresets.desktop.width;
 }
 
-export function getCanvasViewportWidth(viewport: EditorCanvasViewport): string {
+export function getCanvasViewportWidth(
+  viewport: EditorCanvasViewport | string | null | undefined,
+): string {
   return `${getCanvasViewportPixelWidth(viewport)}px`;
 }

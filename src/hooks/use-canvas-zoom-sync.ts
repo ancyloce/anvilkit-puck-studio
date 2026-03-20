@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { getCanvasZoomConfig } from "@/lib/canvas/zoom";
+import { getCanvasZoomConfig, normalizeCanvasZoomLevel } from "@/lib/canvas/zoom";
 import { getCanvasViewportPixelWidth } from "@/lib/canvas/viewports";
 import { useCanvasViewport, useEditorUiStoreApi } from "@/store/editor-ui";
 
@@ -21,7 +21,7 @@ export function useCanvasZoomSync<T extends HTMLElement = HTMLDivElement>() {
         viewportWidth: getCanvasViewportPixelWidth(canvasViewport),
         frameWidth: rect.width,
         frameHeight: rect.height,
-        zoom: store.canvasZoomConfig.zoom,
+        zoom: normalizeCanvasZoomLevel(store.canvasZoomConfig.zoom),
       });
 
       if (
