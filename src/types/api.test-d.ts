@@ -42,6 +42,24 @@ expectType<string>(imageItem.id);
 expectType<string>(imageItem.src);
 expectType<string>(imageItem.alt);
 
+declare const imagesProps: ImagesProps;
+expectType<number | undefined>(imagesProps.pageSize);
+expectType<ImagesProps["loadPage"] | undefined>(imagesProps.loadPage);
+
+const imageLoadPage: NonNullable<ImagesProps["loadPage"]> = async (
+  query,
+  page,
+  pageSize,
+) => {
+  expectType<string>(query);
+  expectType<number>(page);
+  expectType<number>(pageSize);
+
+  return { items: [imageItem], hasMore: false };
+};
+
+expectAssignable<NonNullable<ImagesProps["loadPage"]>>(imageLoadPage);
+
 // ─── CopywritingItem ─────────────────────────────────────────────────────────
 declare const copyItem: CopywritingItem;
 expectType<string>(copyItem.label);
