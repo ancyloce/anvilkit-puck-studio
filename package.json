@@ -1,6 +1,6 @@
 {
   "name": "@anvilkit/puck-studio",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "Shadcn UI replacement for all Puck Editor override surfaces",
   "publishConfig": {
     "access": "public"
