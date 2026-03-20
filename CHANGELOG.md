@@ -1,3 +1,9 @@
+## [0.3.4](https://github.com/ancyloce/anvilkit-studio/compare/v0.3.3...v0.3.4) (2026-03-19)
+
+### Refactors
+
+* Update PopoverPanel styles to include a border for improved visual consistency ([c210d81](https://github.com/ancyloce/anvilkit-studio/commit/c210d818a50b0dbbb1ca6a1096147f7599c2f0e0))
+
 ## [0.3.3](https://github.com/ancyloce/anvilkit-studio/compare/v0.3.2...v0.3.3) (2026-03-19)
 
 ### Refactors
