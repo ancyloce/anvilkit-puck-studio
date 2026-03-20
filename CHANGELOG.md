@@ -1,3 +1,9 @@
+## [0.4.3](https://github.com/ancyloce/anvilkit-studio/compare/v0.4.2...v0.4.3) (2026-03-20)
+
+### Refactors
+
+* Add javascript-obfuscator for code obfuscation in build process and update tsup configuration to include obfuscation plugin. ([88eb4f8](https://github.com/ancyloce/anvilkit-studio/commit/88eb4f8b3bd00b942fd055d319a3e94217988b4b))
+
 ## [0.4.2](https://github.com/ancyloce/anvilkit-studio/compare/v0.4.1...v0.4.2) (2026-03-20)
 
 ### Refactors
