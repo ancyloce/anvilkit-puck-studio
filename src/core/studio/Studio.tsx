@@ -88,7 +88,6 @@ export function Studio({
     let cancelled = false;
     import("@puckeditor/plugin-ai").then(({ createAiPlugin }) => {
       if (cancelled) return;
-      // @ts-expect-error — CSS import resolved by bundler, not TS
       import("@puckeditor/plugin-ai/styles.css").catch(() => {});
       setAiPlugin(createAiPlugin({ host: aiHost }));
     });
