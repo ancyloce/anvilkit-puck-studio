@@ -54,8 +54,6 @@ export interface StudioProps {
   onOpenCollaborators?: StudioActionHandler;
   onExportJson?: StudioActionHandler;
   onHeaderAction?: (action: StudioHeaderAction) => void;
-  headerSlot?: React.ReactNode;
-  drawerHeaderSlot?: React.ReactNode;
   className?: string;
 
   // Library data
@@ -115,11 +113,15 @@ export function Studio({
   React.useEffect(() => {
     if (!aiHost) return;
     let cancelled = false;
-    import("@puckeditor/plugin-ai").then(({ createAiPlugin }) => {
-      if (cancelled) return;
-      import("@puckeditor/plugin-ai/styles.css").catch(() => {});
-      setAiPlugin(createAiPlugin({ host: aiHost }));
-    });
+    import("@puckeditor/plugin-ai")
+      .then(({ createAiPlugin }) => {
+        if (cancelled) return;
+        import("@puckeditor/plugin-ai/styles.css").catch(() => {});
+        setAiPlugin(createAiPlugin({ host: aiHost }));
+      })
+      .catch(() => {
+        // @puckeditor/plugin-ai is an optional dependency — ignore if not installed
+      });
     return () => { cancelled = true; };
   }, [aiHost]);
 
