@@ -12,6 +12,7 @@ import {
 } from "tsd";
 import type { MouseEventHandler } from "react";
 import type { Data } from "@puckeditor/core";
+import { enMessages, zhMessages } from "../index";
 
 import type {
   StudioProps,
@@ -125,6 +126,8 @@ expectType<"light" | "dark">(uiStore.theme);
 expectType<string>(uiStore.drawerSearch);
 expectType<EditorUiStore>(uiStoreApi.getState());
 expectType<Locale>(i18nStoreApi.getState().locale);
+expectType<Messages>(enMessages);
+expectType<Messages>(zhMessages);
 
 // ─── Locale ──────────────────────────────────────────────────────────────────
 expectAssignable<Locale>("en");

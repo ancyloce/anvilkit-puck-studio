@@ -36,8 +36,8 @@ export {
 } from "./editor-ui";
 export { useMsg, useLocale, useSetLocale } from "./editor-i18n";
 
-// Default messages
-export { defaultMessages } from "./editor-i18n";
+// Built-in message catalogs
+export { defaultMessages, enMessages, zhMessages } from "./editor-i18n";
 
 /**
  * @deprecated Use createEditorUiStore() via EditorUiStoreProvider instead.

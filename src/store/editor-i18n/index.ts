@@ -13,3 +13,5 @@ export { EditorI18nStoreProvider, useEditorI18nStoreApi } from "./editor-i18n.co
 export { useMsg, useLocale, useSetLocale } from "./editor-i18n.hooks";
 
 export { defaultMessages } from "./default-messages";
+export { defaultMessages as enMessages } from "@/i18n/en";
+export { defaultMessages as zhMessages } from "@/i18n/zh";

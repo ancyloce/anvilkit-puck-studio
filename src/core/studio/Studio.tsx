@@ -96,15 +96,16 @@ export function Studio({
   const uiStore = React.useRef(createEditorUiStore(storeId ?? "default")).current;
   const i18nStore = React.useRef(
     createEditorI18nStore({
-      locale: locale ?? "zh",
+      locale: locale ?? "en",
       messages: messages ?? defaultMessages,
+      storeId: storeId ?? "default",
     }),
   ).current;
   const mergedUi = React.useMemo(() => mergeStudioUi(ui), [ui]);
 
   // Keep i18n store in sync when locale/messages props change after mount
   React.useEffect(() => {
-    i18nStore.getState().setLocale(locale ?? "zh", messages ?? defaultMessages);
+    i18nStore.getState().setLocale(locale ?? "en", messages ?? defaultMessages);
   }, [locale, messages, i18nStore]);
 
   type AiPlugin = Awaited<ReturnType<typeof import("@puckeditor/plugin-ai")["createAiPlugin"]>>;

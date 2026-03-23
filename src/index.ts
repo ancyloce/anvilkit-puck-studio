@@ -28,4 +28,6 @@ export {
   EditorI18nStoreProvider,
   useEditorI18nStoreApi,
   defaultMessages,
+  enMessages,
+  zhMessages,
 } from "./store";
