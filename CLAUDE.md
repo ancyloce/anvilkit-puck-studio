@@ -1,6 +1,6 @@
-# CLAUDE.md — @anvilkit/puck-studio
+# CLAUDE.md
 
-AI-assisted development guide for this repository.
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Snapshot
 
@@ -31,6 +31,8 @@ Nothing in `src/` may import from `next`. Keep Next.js usage in `app/` only.
 | `src/core/overrides/fields/*` | Field wrapper plus field type registry |
 | `src/features/library-dnd/*` | Typed drag/drop contract and pure prop replacement helpers |
 | `src/features/theme/useThemeSync.ts` | Theme sync for host document and iframe |
+| `src/hooks/*` | Shared React hooks (canvas zoom sync, drop bridge, auto-height, studio action reporting) |
+| `src/lib/*` | Utility modules (canvas positioning, drop targets, zoom math, viewport config, Puck selector, strict context helper) |
 | `src/store/*` | UI store, i18n store, providers, and hooks |
 | `src/components/ui/*` | Base UI wrappers and shared primitives |
 | `src/components/ui/scroll-area.tsx` | Shared scroll wrapper; exposes `viewportRef` for virtualized panels |
@@ -86,7 +88,7 @@ Current public library prop surfaces to keep in sync:
 
 1. Creates a persisted UI store with `createEditorUiStore(storeId ?? "default")`
 2. Creates a persisted i18n store with `createEditorI18nStore({ locale, messages })`
-3. Lazily imports `@puckeditor/plugin-ai` only when `aiHost` is set
+3. Lazily imports `@puckeditor/plugin-ai` only when `aiHost` is set — it is an `optionalDependency`; if not installed the import fails silently and the AI panel is skipped
 4. Merges overrides in this order:
    `{ ...(aiPlugin?.overrides ?? {}), ...puckOverrides, ...overrideExtensions }`
 5. Renders `Puck` with [`EditorLayout`](./src/core/studio/layout/Layout.tsx) as children
@@ -135,14 +137,14 @@ Notes:
 
 ## State, Persistence, and i18n
 
-UI store in [`src/store/ui.ts`](./src/store/ui.ts):
+UI store in [`src/store/editor-ui/`](./src/store/editor-ui/):
 
 - Active tabs: `insert`, `layer`, `image`, `text`, `copilot`
 - Persists `activeTab`, `drawerCollapsed`, `outlineExpanded`, and `theme`
 - Does not persist `drawerSearch`
 - Uses localStorage key `anvilkit-ui-${storeId}`
 
-i18n store in [`src/store/i18n.ts`](./src/store/i18n.ts):
+i18n store in [`src/store/editor-i18n/`](./src/store/editor-i18n/):
 
 - Persists only `locale`
 - Replaces `messages` from props on mount/update
@@ -153,7 +155,7 @@ Important nuance:
 
 Default messages:
 
-- [`src/store/i18n-defaults.ts`](./src/store/i18n-defaults.ts) re-exports the Chinese catalog
+- [`src/store/editor-i18n/default-messages.ts`](./src/store/editor-i18n/default-messages.ts) re-exports the Chinese catalog
 - English messages exist in [`src/i18n/en.ts`](./src/i18n/en.ts) but are not exported from the package root
 - If you add or rename a message key, update both [`src/i18n/zh.ts`](./src/i18n/zh.ts) and [`src/i18n/en.ts`](./src/i18n/en.ts)
 
@@ -168,7 +170,7 @@ The image and copy libraries do not talk to the canvas directly. They use typed 
 Flow:
 
 1. [`useGhostDrag`](./src/features/library-dnd/useGhostDrag.ts) creates the floating ghost element and dispatches typed events
-2. [`CanvasIframe`](./src/core/overrides/canvas/CanvasIframe.tsx) installs [`useLibraryDropBridge`](./src/core/overrides/canvas/useLibraryDropBridge.ts)
+2. [`CanvasIframe`](./src/core/overrides/canvas/CanvasIframe.tsx) installs [`useCanvasLibraryDropBridge`](./src/hooks/use-canvas-library-drop-bridge.ts)
 3. The bridge hit-tests inside the iframe, highlights eligible targets, and dispatches Puck `replace` actions
 4. [`replace-props.ts`](./src/features/library-dnd/replace-props.ts) performs pure image/text replacement heuristics
 
@@ -229,7 +231,7 @@ Tooltip special case:
 
 Be careful not to document or rely on these as finished features:
 
-- `StudioProps.ui`, `StudioProps.onAction`, `StudioProps.headerSlot`, and `StudioProps.drawerHeaderSlot` are declared in [`src/core/studio/Studio.tsx`](./src/core/studio/Studio.tsx) but are not currently used
+- `StudioProps.ui` and `StudioProps.onAction` are declared in [`src/core/studio/Studio.tsx`](./src/core/studio/Studio.tsx) but are not currently used
 - The built-in share dialog and collaborators popover are shell conveniences, not real-time collaboration or permission-management features
 - `defaultMessages` exports only the Chinese catalog even though an English catalog exists internally
 
@@ -243,6 +245,12 @@ pnpm lint
 pnpm test
 pnpm test:types
 pnpm build
+```
+
+To run a single test file or pattern:
+
+```bash
+pnpm test src/features/library-dnd/replace-props.test.ts
 ```
 
 Command meanings:
