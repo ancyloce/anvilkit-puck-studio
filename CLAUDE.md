@@ -8,7 +8,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - The local demo app lives in [`app/`](./app)
 - `Studio` is a Puck wrapper plus an opinionated desktop shell, not just an overrides object
 - `puckOverrides` styles core Puck surfaces, while `Header` and `Aside` live outside Puck in the shell
-- Default UI messages are Chinese
+- Default UI messages are English
 - `uiStore` and the `legacy` entrypoint exist only for backward compatibility
 
 Hard constraint:
@@ -87,7 +87,7 @@ Current public library prop surfaces to keep in sync:
 `Studio` currently does the following:
 
 1. Creates a persisted UI store with `createEditorUiStore(storeId ?? "default")`
-2. Creates a persisted i18n store with `createEditorI18nStore({ locale, messages })`
+2. Creates a persisted i18n store with `createEditorI18nStore({ locale, messages, storeId })`
 3. Lazily imports `@puckeditor/plugin-ai` only when `aiHost` is set — it is an `optionalDependency`; if not installed the import fails silently and the AI panel is skipped
 4. Merges overrides in this order:
    `{ ...(aiPlugin?.overrides ?? {}), ...puckOverrides, ...overrideExtensions }`
@@ -148,15 +148,16 @@ i18n store in [`src/store/editor-i18n/`](./src/store/editor-i18n/):
 
 - Persists only `locale`
 - Replaces `messages` from props on mount/update
-- Uses localStorage key `anvilkit-i18n`
+- Uses localStorage key `anvilkit-i18n-${storeId}`
 
 Important nuance:
-`storeId` namespaces the UI store only. The i18n store key is global today.
+`storeId` namespaces both the UI store and the i18n store.
 
 Default messages:
 
-- [`src/store/editor-i18n/default-messages.ts`](./src/store/editor-i18n/default-messages.ts) re-exports the Chinese catalog
-- English messages exist in [`src/i18n/en.ts`](./src/i18n/en.ts) but are not exported from the package root
+- [`src/store/editor-i18n/default-messages.ts`](./src/store/editor-i18n/default-messages.ts) re-exports the English catalog
+- [`enMessages`](./src/index.ts) re-exports the English catalog from [`src/i18n/en.ts`](./src/i18n/en.ts)
+- [`zhMessages`](./src/index.ts) re-exports the Chinese catalog from [`src/i18n/zh.ts`](./src/i18n/zh.ts)
 - If you add or rename a message key, update both [`src/i18n/zh.ts`](./src/i18n/zh.ts) and [`src/i18n/en.ts`](./src/i18n/en.ts)
 
 ## Drag-and-Drop Contract
@@ -233,7 +234,6 @@ Be careful not to document or rely on these as finished features:
 
 - `StudioProps.ui` and `StudioProps.onAction` are declared in [`src/core/studio/Studio.tsx`](./src/core/studio/Studio.tsx) but are not currently used
 - The built-in share dialog and collaborators popover are shell conveniences, not real-time collaboration or permission-management features
-- `defaultMessages` exports only the Chinese catalog even though an English catalog exists internally
 
 If you change any of the above, update both docs and type tests.
 

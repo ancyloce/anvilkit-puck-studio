@@ -14,7 +14,7 @@ Opinionated Puck editor chrome and override pack built with React 19, `@base-ui/
 - `Studio`: a desktop editor shell around `<Puck />` with a custom header, left sidebar, preview area, and fields panel
 - `puckOverrides`: a packaged set of Puck overrides for drawer, outline, preview, canvas, and fields surfaces
 - Virtualized image and copy libraries with ghost-drag into the canvas
-- Per-instance persisted UI state via `storeId`
+- Per-instance persisted UI and locale state via `storeId`
 - Persisted locale state plus message overrides
 - Light/dark theme sync between the host document and the Puck iframe
 - Optional AI copilot panel when `aiHost` is provided
@@ -96,8 +96,8 @@ export function Editor({
 | `images` | Configures image library `items`, `seeds`, or paged loading |
 | `copywritings` | Configures copy library `items` or paged loading |
 | `aiHost` | Lazily loads `@puckeditor/plugin-ai` and renders its panel in the copilot tab |
-| `storeId` | Namespaces persisted UI state under `anvilkit-ui-${storeId}` |
-| `locale` | Current locale string; defaults to `"zh"` |
+| `storeId` | Namespaces persisted UI state under `anvilkit-ui-${storeId}` and locale state under `anvilkit-i18n-${storeId}` |
+| `locale` | Current locale string; defaults to `"en"` |
 | `messages` | Plain key/value message map used by the shell |
 | `className` | Applied to the outer wrapper around `Puck` |
 
@@ -313,21 +313,19 @@ const remoteCopy: CopywritingProps = {
 
 ## Localization
 
-`Studio` defaults to Chinese UI messages because [`defaultMessages`](./src/store/i18n-defaults.ts) re-exports the Chinese catalog.
+`Studio` now defaults to English UI messages because [`defaultMessages`](./src/store/i18n-defaults.ts) re-exports the English catalog. The built-in Chinese catalog is also exported at the package root as `zhMessages`.
 
 You can switch locale and provide your own message map:
 
 ```tsx
+import { Studio, zhMessages } from "@anvilkit/puck-studio";
+
 <Studio
   config={config}
   data={data}
   onPublish={save}
-  locale="en"
-  messages={{
-    "header.publish": "Publish",
-    "header.undo": "Undo",
-    "header.redo": "Redo",
-  }}
+  locale="zh"
+  messages={zhMessages}
 />
 ```
 
@@ -402,6 +400,8 @@ The drag-drop libraries communicate with the canvas through typed `window` event
 - `useEditorUiStoreApi`
 - `useEditorI18nStoreApi`
 - `defaultMessages`
+- `enMessages`
+- `zhMessages`
 
 ### Public types
 
