@@ -3,7 +3,7 @@ import {
   isImageUrl,
   replaceImageInProps,
   replaceTextInProps,
-} from "./replace-props";
+} from "@/features/library-dnd/replace-props";
 
 // ─── isImageUrl ───────────────────────────────────────────────────────────────
 
