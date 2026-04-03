@@ -99,7 +99,7 @@ export function FieldWrapper({
             </BreadcrumbList>
           </Breadcrumb>
         </div>
-        {children}
+        <ScrollArea className="flex-1">{children}</ScrollArea>
       </div>
     </ScrollArea>
   );
